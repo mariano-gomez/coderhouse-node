@@ -1,0 +1,242 @@
+[
+  {
+    "id": 1,
+    "title": "Arroz",
+    "description": "Arroz blanco de grano largo",
+    "price": 2.99,
+    "stock": 50,
+    "keywords": ["granos", "almacén", "arroz"]
+  },
+  {
+    "id": 2,
+    "title": "Azúcar",
+    "description": "Azúcar blanca refinada",
+    "price": 1.99,
+    "stock": 40,
+    "keywords": ["granos", "almacén", "azúcar"]
+  },
+  {
+    "id": 3,
+    "title": "Aceite de oliva",
+    "description": "Aceite de oliva extra virgen",
+    "price": 6.99,
+    "stock": 20,
+    "keywords": ["aceite", "almacén", "oliva"]
+  },
+  {
+    "id": 4,
+    "title": "Sal",
+    "description": "Sal de mesa iodada",
+    "price": 0.99,
+    "stock": 60,
+    "keywords": ["condimentos", "almacén", "sal"]
+  },
+  {
+    "id": 5,
+    "title": "Pasta",
+    "description": "Pasta de trigo durum",
+    "price": 1.49,
+    "stock": 30,
+    "keywords": ["granos", "almacén", "pasta"]
+  },
+  {
+    "id": 6,
+    "title": "Café",
+    "description": "Café molido 100% arábica",
+    "price": 4.99,
+    "stock": 25,
+    "keywords": ["bebidas", "almacén", "café"]
+  },
+  {
+    "id": 7,
+    "title": "Harina",
+    "description": "Harina de trigo todo uso",
+    "price": 2.49,
+    "stock": 35,
+    "keywords": ["granos", "almacén", "harina"]
+  },
+  {
+    "id": 8,
+    "title": "Conservas de tomate",
+    "description": "Tomates enlatados pelados",
+    "price": 1.79,
+    "stock": 15,
+    "keywords": ["conservas", "almacén", "tomate"]
+  },
+  {
+    "id": 9,
+    "title": "Vinagre",
+    "description": "Vinagre de vino tinto",
+    "price": 2.29,
+    "stock": 18,
+    "keywords": ["condimentos", "almacén", "vinagre"]
+  },
+  {
+    "id": 10,
+    "title": "Legumbres enlatadas",
+    "description": "Mezcla de legumbres enlatadas",
+    "price": 1.99,
+    "stock": 22,
+    "keywords": ["conservas", "almacén", "legumbres"]
+  },
+  {
+    "id": 11,
+    "title": "Salsa de soja",
+    "description": "Salsa de soja natural",
+    "price": 3.49,
+    "stock": 12,
+    "keywords": ["salsas", "almacén", "soja"]
+  },
+  {
+    "id": 12,
+    "title": "Miel",
+    "description": "Miel pura de abeja",
+    "price": 5.49,
+    "stock": 8,
+    "keywords": ["dulces", "almacén", "miel"]
+  },
+  {
+    "id": 13,
+    "title": "Galletas",
+    "description": "Galletas crujientes de avena",
+    "price": 2.99,
+    "stock": 28,
+    "keywords": ["dulces", "almacén", "galletas"]
+  },
+  {
+    "id": 14,
+    "title": "Cereales",
+    "description": "Cereales integrales para el desayuno",
+    "price": 3.99,
+    "stock": 32,
+    "keywords": ["desayuno", "almacén", "cereales"]
+  },
+  {
+    "id": 15,
+    "title": "Especias",
+    "description": "Mezcla de especias para condimentar",
+    "price": 1.99,
+    "stock": 45,
+    "keywords": ["condimentos", "almacén", "especias"]
+  },
+  {
+    "id": 16,
+    "title": "Mermelada",
+    "description": "Mermelada de frutas variadas",
+    "price": 2.99,
+    "stock": 14,
+    "keywords": ["dulces", "almacén", "mermelada"]
+  },
+  {
+    "id": 17,
+    "title": "Caldos",
+    "description": "Caldos concentrados de pollo",
+    "price": 1.49,
+    "stock": 23,
+    "keywords": ["sopas", "almacén", "caldos"]
+  },
+  {
+    "id": 18,
+    "title": "Levadura",
+    "description": "Levadura seca para panificación",
+    "price": 1.99,
+    "stock": 10,
+    "keywords": ["panadería", "almacén", "levadura"]
+  },
+  {
+    "id": 19,
+    "title": "Cacao en polvo",
+    "description": "Cacao en polvo sin azúcar",
+    "price": 3.99,
+    "stock": 19,
+    "keywords": ["dulces", "almacén", "cacao"]
+  },
+  {
+    "id": 20,
+    "title": "Aceitunas",
+    "description": "Aceitunas verdes sin hueso",
+    "price": 2.49,
+    "stock": 17,
+    "keywords": ["conservas", "almacén", "aceitunas"]
+  },
+  {
+    "id": 21,
+    "title": "Sopa instantánea",
+    "description": "Sopa instantánea de pollo",
+    "price": 0.99,
+    "stock": 27,
+    "keywords": ["sopas", "almacén", "instantáneo"]
+  },
+  {
+    "id": 22,
+    "title": "Cerveza",
+    "description": "Cerveza rubia lager",
+    "price": 1.99,
+    "stock": 30,
+    "keywords": ["bebidas", "almacén", "cerveza"]
+  },
+  {
+    "id": 23,
+    "title": "Chocolate",
+    "description": "Tableta de chocolate negro",
+    "price": 3.49,
+    "stock": 25,
+    "keywords": ["dulces", "almacén", "chocolate"]
+  },
+  {
+    "id": 24,
+    "title": "Salsa de tomate",
+    "description": "Salsa de tomate casera",
+    "price": 1.79,
+    "stock": 32,
+    "keywords": ["salsas", "almacén", "tomate"]
+  },
+  {
+    "id": 25,
+    "title": "Harina de maíz",
+    "description": "Harina de maíz precocida",
+    "price": 2.29,
+    "stock": 21,
+    "keywords": ["granos", "almacén", "maíz"]
+  },
+  {
+    "id": 26,
+    "title": "Mantequilla de maní",
+    "description": "Mantequilla de maní natural",
+    "price": 3.99,
+    "stock": 14,
+    "keywords": ["dulces", "almacén", "mantequilla de maní"]
+  },
+  {
+    "id": 27,
+    "title": "Infusión de hierbas",
+    "description": "Infusión relajante de hierbas",
+    "price": 2.99,
+    "stock": 18,
+    "keywords": ["bebidas", "almacén", "infusión"]
+  },
+  {
+    "id": 28,
+    "title": "Mayonesa",
+    "description": "Mayonesa cremosa",
+    "price": 1.49,
+    "stock": 24,
+    "keywords": ["salsas", "almacén", "mayonesa"]
+  },
+  {
+    "id": 29,
+    "title": "Nueces",
+    "description": "Nueces crudas sin cáscara",
+    "price": 4.99,
+    "stock": 12,
+    "keywords": ["frutos secos", "almacén", "nueces"]
+  },
+  {
+    "id": 30,
+    "title": "Jugo de naranja",
+    "description": "Jugo de naranja natural",
+    "price": 2.49,
+    "stock": 20,
+    "keywords": ["bebidas", "almacén", "jugo de naranja"]
+  }
+]
