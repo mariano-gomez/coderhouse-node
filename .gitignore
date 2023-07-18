@@ -1,3 +1,6 @@
 /.idea
 /Desafio.03/node_modules
+/Desafio.04/node_modules
+/Desafio.04.basic/node_modules
+*.backup.*
 /Proyecto.final/node_modules

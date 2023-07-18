@@ -1,0 +1,47 @@
+[
+  {
+    "id": 1,
+    "title": "Arroz",
+    "description": "Arroz blanco de grano largo",
+    "price": 2.99,
+    "stock": 50,
+    "keywords": [
+      "granos",
+      "almacén",
+      "arroz"
+    ]
+  },
+  {
+    "id": 2,
+    "title": "Azúcar",
+    "description": "Azúcar blanca refinada",
+    "price": 1.99,
+    "stock": 40,
+    "keywords": [
+      "granos",
+      "almacén",
+      "azúcar"
+    ]
+  },
+  {
+    "title": "test 2",
+    "price": "123",
+    "description": "sdgdfnbdfgsadfg",
+    "status": true,
+    "id": 3
+  },
+  {
+    "title": "test 3",
+    "price": "123",
+    "description": "sdgdfnbdfgsadfg",
+    "status": true,
+    "id": 4
+  },
+  {
+    "title": "test 4",
+    "price": "234",
+    "description": "sgdadfgasdgasdf",
+    "status": true,
+    "id": 5
+  }
+]

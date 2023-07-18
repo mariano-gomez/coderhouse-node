@@ -1,0 +1,47 @@
+<div id="products" class="uk-child-width-1-4@m" uk-grid>
+    {{#each products}}
+        <div>
+            <div class="uk-card uk-card-default">
+                <div class="uk-card-media-top">
+                    <img alt="foto producto" />
+                </div>
+                <div class="uk-card-body">
+                    <h3 class="uk-card-title">{{this.title}}</h3>
+                    <h5>USD ${{ this.price }}</h5>
+                    {{#each this.keywords}}
+                        <span class="uk-badge">{{ this }}</span>
+                    {{/each}}
+                    <p>{{ this.description }}</p>
+                    <button class="uk-button uk-button-secondary uk-button-small">Agregar al carrito</button>
+                </div>
+            </div>
+        </div>
+    {{/each}}
+</div>
+
+<hr>
+
+<h2>Agregar producto</h2>
+<div class="uk-margin-top">
+    <form class="uk-form-stacked" action="/products" method="POST">
+        <div class="uk-margin">
+            <label class="uk-form-label" for="form-stacked-text">Nombre</label>
+            <div class="uk-form-controls">
+                <input id="form-stacked-nombre" class="uk-input" type="text" name="title">
+            </div>
+        </div>
+        <div class="uk-margin">
+            <label class="uk-form-label" for="form-stacked-text">Precio</label>
+            <div class="uk-form-controls">
+                <input id="form-stacked-precio" class="uk-input" type="number" name="price">
+            </div>
+        </div>
+        <div class="uk-margin">
+            <label class="uk-form-label" for="form-stacked-text">Descripción</label>
+            <div class="uk-form-controls">
+                <textarea id="form-stacked-description" class="uk-textarea" rows="5" name="description"></textarea>
+            </div>
+        </div>
+        <button class="uk-button uk-button-secondary uk-button-small uk-margin-top" type="submit">Agregar</button>
+    </form>
+</div>
