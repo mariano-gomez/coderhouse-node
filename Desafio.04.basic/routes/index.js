@@ -4,7 +4,7 @@ const { createProductValidatorMiddleware } = require('../middlewares/ProductVali
 const ProductManager = require('../managers/ProductManager');
 const productManager = new ProductManager('productos.json');
 
-router.get('/products/:id', async (req, res) => {
+router.get('/products/:pid', async (req, res) => {
     const { pid } = req.params;
     const product = await productManager.getById(parseInt(pid));
     if (product) {
@@ -38,12 +38,27 @@ router.post('/products', createProductValidatorMiddleware, async (req, res) => {
     }
 });
 
+router.get('/products/delete/:pid', async (req, res) => {
+    const { pid } = req.params;
+
+    if (!await productManager.getById(pid)) {
+        res.sendStatus(404);
+    }
+
+    await productManager.delete(pid);
+    res.redirect('/');
+});
+
 //  Para cualquier otra ruta no existente
 router.get('/', async (req, res) => {
     const products = await productManager.getAll();
     res.render('home', {
         products
     });
+});
+
+router.get('/realtimeproducts', async (req, res) => {
+    res.render('realTimeProducts');
 });
 
 //  Para cualquier otra ruta no existente

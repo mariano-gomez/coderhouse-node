@@ -1,10 +1,8 @@
 const fs = require('fs/promises');
 const path = require('path');
+const SocketManager = require('./SocketManager');
 
 class ProductManager {
-
-    fileProductos;      //  Deprecated
-    #ultimoIdAsignado;  //  Deprecated
 
     #products;
     #itemsFile;
@@ -44,6 +42,11 @@ class ProductManager {
 
         await this.#saveFile();
 
+        const socket = SocketManager.getInstance();
+        if (socket) {
+            socket.emit('products.list.updated', this.#products);
+        }
+
         return newProduct;
     }
 
@@ -77,6 +80,11 @@ class ProductManager {
         this.#products = this.#products.filter(p => p.id != id);
 
         await this.#saveFile();
+
+        const socket = SocketManager.getInstance();
+        if (socket) {
+            socket.emit('products.list.updated', this.#products);
+        }
     }
 
     async update(id, newProductData) {

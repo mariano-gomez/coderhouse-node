@@ -12,7 +12,11 @@
                         <span class="uk-badge">{{ this }}</span>
                     {{/each}}
                     <p>{{ this.description }}</p>
-                    <button class="uk-button uk-button-secondary uk-button-small">Agregar al carrito</button>
+                    <button class="uk-button uk-button-secondary uk-button-small">
+                        <a href="/products/delete/{{this.id}}">
+                        Eliminar
+                        </a>
+                    </button>
                 </div>
             </div>
         </div>
