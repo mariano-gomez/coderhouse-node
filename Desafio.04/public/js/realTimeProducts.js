@@ -4,8 +4,13 @@ const productsEl = document.querySelector('#products');
 
 const socketBehavior = {
     enableSocketBehavior() {
-        socketBehavior.fetchAllProducts();
-        socketBehavior.listenProductsList();
+        socket.emit('handshake', null, (response) => {
+            console.log('cliente conectado');
+
+            //  once the connection is confirmed, i can start sending and receiving data
+            socketBehavior.listenSocketEvents();
+            socketBehavior.fetchAllProducts();
+        });
     },
 
     fetchAllProducts() {
@@ -13,11 +18,39 @@ const socketBehavior = {
         socket.emit('products.list.request', null);
     },
 
-    listenProductsList() {
+    listenSocketEvents() {
         socket.on('products.list.updated', (products) => {
             console.log('receiving data...');
             renderProductsList(products);
         });
+
+        socket.on('products.delete.error', (error) => {
+            renderProductDeleteError(error);
+        });
+    },
+
+    createProduct() {
+        const formEl = document.querySelector('#productForm');
+        const title = formEl.querySelector('#title').value;
+        const price = formEl.querySelector('#price').value;
+        const description = formEl.querySelector('#description').value;
+        const code = formEl.querySelector('#code').value;
+        const stock = formEl.querySelector('#stock').value;
+        const category = formEl.querySelector('#category').value;
+        const status = formEl.querySelector('#status').value;
+        socket.emit('product.create', { title, price, description, code, stock, category, status });
+
+        formEl.querySelector('#title').value = '';
+        formEl.querySelector('#price').value = '';
+        formEl.querySelector('#description').value = '';
+        formEl.querySelector('#code').value = '';
+        formEl.querySelector('#stock').value = '';
+        formEl.querySelector('#category').value = '';
+        formEl.querySelector('#status').value = '';
+    },
+
+    deleteProduct(productId) {
+        socket.emit('product.delete.request', productId);
     }
 };
 
@@ -35,21 +68,20 @@ function renderProductsList(productsList) {
                     <div class="uk-card-body">
                         <h3 class="uk-card-title">${product.title}</h3>
                         <h5>USD ${product.price}</h5>
-                        ${renderProductKeywords(product)}
+                        ${renderProductKeywords(product.keywords)}
                         <p>${product.description }</p>
-                        <button onclick="addToCart(${product.id})" class="uk-button uk-button-secondary uk-button-small">Agregar al carrito</button>
+                        <button onclick="socketBehavior.deleteProduct(${product.id})" class="uk-button uk-button-secondary uk-button-small">Eliminar</button>
                     </div>
                 </div>
             </div>
         `;
     }
-    console.log('products list updated');
 }
 
-function renderProductKeywords(product) {
+function renderProductKeywords(keywords) {
     html = '';
-    if (product.keywords) {
-        for (const keyword of product.keywords) {
+    if (keywords) {
+        for (const keyword of keywords) {
             html += `
                 <span class="uk-badge">${keyword}</span>
             `;

@@ -95,6 +95,15 @@ class ProductManager {
         this.#products = this.#products.filter(p => p.id != id);
 
         await this.#saveFile();
+
+        const socket = SocketManager.getInstance();
+        if (socket) {
+            //  TODO: for some reason, when i refresh the browser, the list doesn't updates for the 1st creation
+            //   unless i also emit with the `.broadcast`. That is why (temporarily) i also use it here. Even though
+            //  the cleanest way would be to only use the `socket.emit()` method
+            socket.broadcast.emit('products.list.updated', this.#products);
+            socket.emit('products.list.updated', this.#products);
+        }
     }
 
     async update(id, newProductData) {

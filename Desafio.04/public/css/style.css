@@ -53,3 +53,8 @@ h1 {
   align-items: baseline;
   justify-content: space-between;
 }
+
+#products a, #products a:hover, #products a:visited, #products a:active {
+  text-decoration: none;
+  color:white;
+}
