@@ -1,0 +1,47 @@
+<div id="products" class="uk-child-width-1-4@m" uk-grid>
+
+</div>
+
+<hr>
+
+<h2>Agregar producto</h2>
+
+<div class="uk-margin-top">
+    <form class="uk-form-stacked" action="/products" method="POST" id="productForm">
+        <div class="uk-margin">
+            <label class="uk-form-label" for="form-stacked-text">Nombre</label>
+            <div class="uk-form-controls">
+                <input class="uk-input" type="text" name="title" id="title">
+            </div>
+        </div>
+        <div class="uk-margin">
+            <label class="uk-form-label" for="form-stacked-text">Precio</label>
+            <div class="uk-form-controls">
+                <input class="uk-input" type="number" name="price" id="price">
+            </div>
+        </div>
+        <div class="uk-margin">
+            <label class="uk-form-label" for="form-stacked-text">Descripción</label>
+            <div class="uk-form-controls">
+                <textarea class="uk-textarea" rows="5" name="description" id="description"></textarea>
+            </div>
+        </div>
+        <div class="uk-margin">
+            <label class="uk-form-label" for="form-stacked-text">Código</label>
+            <div class="uk-form-controls">
+                <input class="uk-input" type="number" name="code" id="code">
+            </div>
+        </div>
+        <div class="uk-margin">
+            <label class="uk-form-label" for="form-stacked-text">Stock</label>
+            <div class="uk-form-controls">
+                <input class="uk-input" type="number" name="stock" id="stock">
+            </div>
+        </div>
+        <input type="hidden" name="category" value="category A" id="category"/>
+        <input type="hidden" name="status" value="false" id="status"/>
+        <button class="uk-button uk-button-secondary uk-button-small uk-margin-top" type="button" onclick="socketBehavior.createProduct()">Agregar</button>
+    </form>
+</div>
+
+<script src="/static/js/realTimeProducts.js"></script>
