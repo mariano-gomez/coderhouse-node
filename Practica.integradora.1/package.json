@@ -4,7 +4,8 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "start": "nodemon app.js"
+    "start": "nodemon app.js",
+    "seed:products": "node ./scripts/seeder.products.js"
   },
   "keywords": [],
   "author": "",
@@ -15,6 +16,7 @@
   "dependencies": {
     "express": "^4.18.2",
     "express-handlebars": "^7.0.7",
+    "mongoose": "^7.4.1",
     "socket.io": "^4.7.1"
   }
 }

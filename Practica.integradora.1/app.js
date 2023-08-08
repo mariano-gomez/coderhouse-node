@@ -2,44 +2,76 @@ const express = require('express');
 const http = require('http');
 const path = require('path');
 const handlebars = require('express-handlebars');
-const { Server, Socket} = require('socket.io');
+const { Server, Socket } = require('socket.io');
+const mongoose = require('mongoose');
 
-const SocketManager = require('./managers/SocketManager');
-const socketManagerFunction = require('./websockets');
+const dependencyContainer = require('./dependency.injection');
+
+//  TODO: temporal, until we add user management
+const userModel = require('./dao/models/user.model');
 
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server);
+dependencyContainer.set('app', app);
 
 //  setting the `handlebars` template engine
 app.engine('handlebars', handlebars.engine());
 app.set('views', path.join(__dirname, '/views'));
 app.set('view engine', 'handlebars');
 
+//  eventually, i'll need to emit events from different places, so i need a unique place where i can fetch socket.io
+dependencyContainer.set('io', io);
+
 //  Some global configs
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use('/static', express.static(path.join(__dirname + '/public')));
 
+
+const socketManagerFunction = require('./websockets');
+const {apiRoutes, standardRoutes} = require("./routes");
+const productModel = require("./dao/models/product.model");
+
+async function startServer() {
+    await mongoose.connect("mongodb+srv://coderhose_app:OUQoVf5WZ54IoRKL@cluster0.u8oklk1.mongodb.net/entregas_ecommerce?retryWrites=true&w=majority");
+    console.log('DB CONNECTED');
+
+    //  once i connect to the DB, i fetch a user
+    //  Until we start working with users, we temporarily hardcode a mockup user
+    app.use(async (req, res, next) => {
+        let user = await userModel.findOne();
+        if (!user) {
+            user = await userModel.create({
+                firstname: 'Mariano',
+                lastname: 'Gomez',
+                email: 'marianogomez@gmail.com',
+                password: 'myPassword',
+                role: 'admin',
+            });
+        }
+        req.user = user;
+
+        next();
+    });
+
 //  setting the routes
-const { apiRoutes, standardRoutes } = require('./routes');
-app.use('/api', apiRoutes);
+    const { apiRoutes, standardRoutes } = require('./routes');
+    app.use('/api', apiRoutes);
 
 //  To send an error response for any URL not supported
-app.use('/', standardRoutes);
+    app.use('/', standardRoutes);
 
-//  enabling websockets activity
-io.on(
-    'connection', (socket) => {//  event name we're going to listen
-        //  I need to somehow have a way to keep a reference from everywhere to the SocketManager, a singleton is the
-        //  only way i could come up with
-        SocketManager.getInstance(socket);
-        socketManagerFunction(socket);
-    }
-);
+    //  enabling websockets activity
+    io.on(
+        'connection', socketManagerFunction
+    );
 
-const port = 8080;
+    const port = 8080;
 
-server.listen(port, () => {
-    console.log(`Express Server listening at http://localhost:${port}`);
-});
+    server.listen(port, () => {
+        console.log(`Express Server listening at http://localhost:${port}`);
+    });
+}
+
+startServer();

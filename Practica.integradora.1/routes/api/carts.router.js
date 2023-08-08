@@ -1,15 +1,15 @@
 const { Router } = require('express');
-const CartManager = require('../../managers/CartManager');
+const cartManager = require('../../dao/db/cart.manager');
 const checkProductExistsValidatorMiddleware = require('../../middlewares/CheckProductExistsValidator.middleware');
 const cartAddingProductValidatorMiddleware = require('../../middlewares/cartAddingProductValidator.middleware');
 
 const router = Router();
-const cartManager = new CartManager('carts.json');
 
 //  /api/carts
 router.post('/', async (req, res) => {
     try {
-        const newCart = await cartManager.create();
+        //  req.user is set in a global middleware, until we start managing users/sessions/authentication/etc
+        const newCart = await cartManager.create(req.user.id);
         res.status(201).send(newCart);
     } catch (e) {
         res.status(400).send({ "error": e.message });
@@ -20,7 +20,7 @@ router.post('/', async (req, res) => {
 router.get('/:cid', async (req, res) => {
     const { cid } = req.params;
 
-    const cart = await cartManager.getById(parseInt(cid));
+    const cart = await cartManager.getById(cid);
     if (cart) {
         res.send(cart.products);
     } else {

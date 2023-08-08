@@ -20,14 +20,19 @@ npm start
 ## Características
 
 - La estructura del proyecto es la siguiente:
-    - `data/` contiene los archivos de persistencia, hasta que se implemente una integración con una base de datos
-    - `managers/` contiene las clases que tienen la responsabilidad de gestionar las persistencias (CRUDs/ABMs)
+    - `dao/` contiene archivos de persistencia, necesarios hasta la implementacion de persistencia en base de datos
+      - `db/` contiene los managers que interactuan con la DB, a traves de los schemas/modelos definidos para tal fin
+      - `[deprecated] filesystem/` contiene las clases que tienen la responsabilidad de gestionar las persistencias (CRUDs/ABMs) en los archivos ubicados en `/data` (deprecated) 
+      - `models/` contiene las especificaciones, para utilizar con mongoose, de los documentos donde se va a persistir la informacion 
+    - `[deprecated] data/` contiene archivos de persistencia, necesarios hasta la implementacion de persistencia en base de datos
     - `middlewares/` se optó por realizar las validaciones de los inputs mediante middlewares específicos para cada endpoint
     - `public/` archivos css y javascript
+    - `scripts/` contiene scripts que eventualmente pueden facilitar la tarea de rellenar la DB con informacion
     - `routes/` contiene los manejadores para todas las rutas contempladas del proyecto
     - `views/` plantillas handlebars
     - `websockets/` codigo vinculado al comportamiento del server con websockets
     - `app.js` el archivo principal del proyecto
+    - `dependency.injection.js` la idea de este archivo es centralizar las referencias a distintos recursos o servicios, para poder accederlos de forma facil desde cualquier lugar del sistema
 
 ## Endpoints
 
@@ -45,3 +50,4 @@ npm start
 ## Urls
   - `[GET] /` Pagina "home", que muestra el listado de productos existentes hasta el momento 
   - `[GET] /realtimeproducts` Pagina "home", que muestra el listado de productos existentes hasta el momento en tiempo real (utilizando websockets) 
+  - `[GET] /chat` Pagina desde donde se podra ingresar a un chat basico, utilizando websockets para materializar la funcionalidad 

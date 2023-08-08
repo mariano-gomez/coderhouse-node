@@ -1,6 +1,6 @@
 const fs = require('fs/promises');
 const path = require('path');
-const SocketManager = require('./SocketManager');
+const dependencyContainer = require('../../dependency.injection');
 
 class ProductManager {
 
@@ -53,14 +53,7 @@ class ProductManager {
 
         await this.#saveFile();
 
-        const socket = SocketManager.getInstance();
-        if (socket) {
-            //  TODO: for some reason, when i refresh the browser, the list doesn't updates for the 1st creation
-            //   unless i also emit with the `.broadcast`. That is why (temporarily) i also use it here. Even though
-            //  the cleanest way would be to only use the `socket.emit()` method
-            socket.broadcast.emit('products.list.updated', this.#products);
-            socket.emit('products.list.updated', this.#products);
-        }
+        await this.#updateWebsocket();
 
         return newProduct;
     }
@@ -96,14 +89,7 @@ class ProductManager {
 
         await this.#saveFile();
 
-        const socket = SocketManager.getInstance();
-        if (socket) {
-            //  TODO: for some reason, when i refresh the browser, the list doesn't updates for the 1st creation
-            //   unless i also emit with the `.broadcast`. That is why (temporarily) i also use it here. Even though
-            //  the cleanest way would be to only use the `socket.emit()` method
-            socket.broadcast.emit('products.list.updated', this.#products);
-            socket.emit('products.list.updated', this.#products);
-        }
+        await this.#updateWebsocket();
     }
 
     async update(id, newProductData) {
@@ -131,8 +117,15 @@ class ProductManager {
             }
         }
 
+        await this.#updateWebsocket();
+
         await this.#saveFile();
         return oldProduct;
+    }
+
+    async #updateWebsocket() {
+        const io = dependencyContainer.get('io');
+        io.sockets.emit('products.list.updated', await this.getAll());
     }
 }
 

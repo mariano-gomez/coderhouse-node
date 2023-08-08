@@ -25,7 +25,13 @@ const socketBehavior = {
         });
 
         socket.on('products.delete.error', (error) => {
-            renderProductDeleteError(error);
+            //  TODO: think how to inform this
+            // renderProductDeleteError(error);
+        });
+
+        socket.on('products.create.error', (error) => {
+            //  TODO: think how to inform this
+            // renderProductCreateError(error);
         });
     },
 
@@ -37,7 +43,7 @@ const socketBehavior = {
         const code = formEl.querySelector('#code').value;
         const stock = formEl.querySelector('#stock').value;
         const category = formEl.querySelector('#category').value;
-        const status = formEl.querySelector('#status').value;
+        const status = formEl.querySelector('#status').value == true;
         socket.emit('product.create', { title, price, description, code, stock, category, status });
 
         formEl.querySelector('#title').value = '';
@@ -45,8 +51,12 @@ const socketBehavior = {
         formEl.querySelector('#description').value = '';
         formEl.querySelector('#code').value = '';
         formEl.querySelector('#stock').value = '';
-        formEl.querySelector('#category').value = '';
-        formEl.querySelector('#status').value = '';
+        if (formEl.querySelector('#category').type != 'hidden') {
+            formEl.querySelector('#category').value = '';
+        }
+        if (formEl.querySelector('#status').type != 'hidden') {
+            formEl.querySelector('#status').value = '';
+        }
     },
 
     deleteProduct(productId) {
@@ -70,7 +80,7 @@ function renderProductsList(productsList) {
                         <h5>USD ${product.price}</h5>
                         ${renderProductKeywords(product.keywords)}
                         <p>${product.description }</p>
-                        <button onclick="socketBehavior.deleteProduct(${product.id})" class="uk-button uk-button-secondary uk-button-small">Eliminar</button>
+                        <button onclick="socketBehavior.deleteProduct('${product._id}')" class="uk-button uk-button-secondary uk-button-small">Eliminar</button>
                     </div>
                 </div>
             </div>

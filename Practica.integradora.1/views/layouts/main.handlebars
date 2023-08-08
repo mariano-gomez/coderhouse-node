@@ -5,10 +5,6 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/normalize.css@8.0.1/normalize.css" type="text/css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" type="text/css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/uikit@3.11.1/dist/css/uikit.min.css" type="text/css">
-
-      <!--This probably should be, for the first time, on the specific template that will use sockets,
-      but considering future implementations, I just put it here now-->
-      <script src="/socket.io/socket.io.js"></script>
   </head>
   <body>
     <div class="uk-container uk-width-1-1 uk-padding-remove uk-margin-remove">
@@ -18,9 +14,15 @@
             <li class="uk-active">
               <a href="/">Home</a>
             </li>
+              <li class="uk-active">
+                  <a href="/realtimeproducts">Real Time</a>
+              </li>
             <li>
               <a href="/carrito">Carrito<span id="cart-badge" class="uk-label">0</span></a>
             </li>
+              <li>
+                  <a href="/chat">Chat</a>
+              </li>
           </ul>
         </div>
       </nav>
@@ -40,7 +42,11 @@
           {{{body}}}
       </div>
     </div>
-    
+
+
+    <!--This probably should be, for the first time, on the specific template that will use sockets,
+    but considering future implementations, I just put it here now-->
+    <script src="/socket.io/socket.io.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/uikit@3.11.1/dist/js/uikit.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/uikit@3.11.1/dist/js/uikit-icons.min.js"></script>
   </body>

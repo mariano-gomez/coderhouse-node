@@ -1,6 +1,5 @@
 const Router = require('express');
-const ProductManager = require('../managers/ProductManager');
-const productManager = new ProductManager('products.json');
+const productManager = require('../dao/db/product.manager');
 
 const { createProductValidatorMiddleware } = require('../middlewares/ProductValidator.middleware');
 
@@ -10,6 +9,11 @@ router.get('/', async (req, res) => {
     const products = await productManager.getAll();
     res.render('home', {
         products
+    });
+});
+
+router.get('/chat', async (req, res) => {
+    res.render('chat', {
     });
 });
 

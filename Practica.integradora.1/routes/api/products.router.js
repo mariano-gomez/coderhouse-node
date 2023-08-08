@@ -1,13 +1,12 @@
 const { Router } = require('express');
-const ProductManager = require('../../managers/ProductManager');
+const productManager = require('../../dao/db/product.manager');
 const { createProductValidatorMiddleware, updateProductValidatorMiddleware } = require('../../middlewares/ProductValidator.middleware');
 const router = Router();
-const productManager = new ProductManager('products.json');
 
 //  /api/products/:pid
 router.get('/:pid', async (req, res) => {
     const { pid } = req.params;
-    const product = await productManager.getById(parseInt(pid));
+    const product = await productManager.getById(pid);
     if (product) {
         res.send(product);
     } else {
@@ -47,14 +46,15 @@ router.put('/:pid', updateProductValidatorMiddleware, async (req, res) => {
     const { body } = req;
 
     try {
-        const updatedProduct = await productManager.update(pid, body);
-        if (updatedProduct === null) {
-            res.sendStatus(404);
+        const updateResult = await productManager.update(pid, body);
+        if (updateResult.modifiedCount >= 1) {
+            res.sendStatus(202);
             return;
         }
 
-        res.status(200).send(updatedProduct);
-    } catch(e) {
+        res.sendStatus(404);
+
+    } catch (e) {
         res.status(500).send({
             message: e.message,
             exception: e.stack

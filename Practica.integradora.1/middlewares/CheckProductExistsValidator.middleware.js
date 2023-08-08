@@ -1,15 +1,31 @@
-const ProductManager = require('../managers/ProductManager');
-
-const productManager = new ProductManager('products.json');
+const productManager = require('../dao/db/product.manager');
+const cartManager = require('../dao/db/cart.manager');
 
 const checkProductExistsValidatorMiddleware = async (req, res, next) => {
-    const { pid } = req.params;
+    const { cid, pid } = req.params;
 
-    const existingProduct = await productManager.getById(pid);
-    if (!existingProduct) {
+    try {
+        const existingProduct = await productManager.getById(pid);
+        if (!existingProduct) {
+            res.status(400).send({ "error": "Product doesn't exists" });
+            return;
+        }
+    } catch (e) {
         res.status(400).send({ "error": "Product doesn't exists" });
-        return;     //  If I don't add this, I get this error on the server console: `Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client`
+        return;
     }
+
+    try {
+        const existingCart = await cartManager.getById(cid);
+        if (!existingCart) {
+            res.status(400).send({ "error": "Cart doesn't exists" });
+            return;
+        }
+    } catch (e) {
+        res.status(400).send({ "error": "Cart doesn't exists" });
+        return;
+    }
+
     next();
 };
 
