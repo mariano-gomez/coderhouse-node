@@ -2,7 +2,6 @@ const cartModel = require('./../models/cart.model')
 
 class CartManager {
 
-    //  TODO: test it
     async getById(cartId) {
         const result = await cartModel.find({ _id: cartId }).lean();
         return result[0];
@@ -20,7 +19,6 @@ class CartManager {
         });
     }
 
-    //  TODO: implement with mongoose
     async addProduct(cartId, productId) {
         const cart = await cartModel.findOne({ _id: cartId });
 
@@ -32,26 +30,16 @@ class CartManager {
         });
 
         if (existingProduct === undefined) {
-
-            await cartModel.updateOne(
-                { _id: cartId }, // Filter to find the document
-                {
-                    $push: { 'products': { product: productId, quantity: 1 } }
-                }
-            );
-
+            cart.products.push({
+              product: productId,
+                quantity: 1
+            });
         } else {
-
-            await cartModel.updateOne(
-                { _id: cartId, 'products.product': productId }, // Filter to find the document
-                {
-                    $inc: { 'products.$.quantity': 1 }
-                }
-            );
+            existingProduct.quantity++;
         }
 
-        const updatedCart = await cartModel.findOne({ _id: cartId });
-        return updatedCart;
+        await cart.save();
+        return cart;
     }
 }
 
