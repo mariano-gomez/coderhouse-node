@@ -1,20 +1,20 @@
 const cartModel = require('./../models/cart.model')
+const { Types } = require("mongoose");
 
 class CartManager {
 
-    async getById(cartId) {
-        const result = await cartModel.find({ _id: cartId }).lean();
-        return result[0];
+    getById(cartId) {
+        return cartModel.findOne({_id: new Types.ObjectId(cartId)}).lean();
     }
 
     async create(userId) {
-        const existingCart = await cartModel.findOne({ user: userId });
+        const existingCart = await cartModel.findOne({ user: new Types.ObjectId(userId) });
         if (existingCart) {
             return existingCart;
         }
 
         return await cartModel.create({
-            user: userId,
+            user: new Types.ObjectId(userId),
             products: []    //  this array will contain objects with the form { productId, quantity }
         });
     }
@@ -26,13 +26,13 @@ class CartManager {
             return null;
         }
         const existingProduct = cart.products.find(p => {
-            return p.product == productId
+            return p.product.id == new Types.ObjectId(productId)
         });
 
         if (existingProduct === undefined) {
             cart.products.push({
-              product: productId,
-                quantity: 1
+              product: new Types.ObjectId(productId),
+              quantity: 1
             });
         } else {
             existingProduct.quantity++;
