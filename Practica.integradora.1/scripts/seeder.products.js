@@ -5,7 +5,7 @@ const mongoose = require('mongoose');
 const productModel = require('../dao/models/product.model');
 
 async function seed() {
-    await mongoose.connect("mongodb+srv://coderhose_app:OUQoVf5WZ54IoRKL@cluster0.u8oklk1.mongodb.net/ecommerce?retryWrites=true&w=majority");
+    await mongoose.connect("mongodb+srv://coderhose_app:OUQoVf5WZ54IoRKL@cluster0.u8oklk1.mongodb.net/entregas_ecommerce?retryWrites=true&w=majority");
 
     const filepath = path.join(__dirname, '..', 'data', 'products.json');
     const data = await fs.readFile(filepath, 'utf-8');
