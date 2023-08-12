@@ -12,6 +12,30 @@ router.get('/', async (req, res) => {
     });
 });
 
+router.get('/cart/:cid', async (req, res) => {
+    const { cid } = req.params;
+    const cart = await cartManager.getById(cid);
+
+    //  in case the cart is empty
+    const products = cart?.products || [];
+
+    res.render('cart', {
+        products,
+        cid
+    });
+});
+
+router.get('/cart/:cid/product/:pid/delete', async (req, res) => {
+    const { cid, pid } = req.params;
+    try {
+        const result = await cartManager.deleteProduct(cid, pid);
+    } catch (e) {
+        console.log(e.message);
+    }
+
+    res.redirect(`/cart/${cid}`);
+});
+
 router.get('/chat', async (req, res) => {
     res.render('chat', {
     });
