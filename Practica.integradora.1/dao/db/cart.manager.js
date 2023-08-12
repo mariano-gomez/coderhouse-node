@@ -39,7 +39,64 @@ class CartManager {
         }
 
         await cart.save();
+
+        //  if i return the cart as it is, the new product will not be populated
+        return cartModel.findOne({ _id: cartId });
+    }
+
+    async deleteProduct(cartId, productId) {
+        const result = await cartModel.updateOne(
+            { _id: cartId },
+            { $pull: { products: { product: new Types.ObjectId(productId) } } },
+        );
+        return result;
+    }
+
+    async clearCart(cartId) {
+        const cart = await cartModel.findOne({ _id: cartId });
+        if (cart) {
+            cart.products = [];
+            await cart.save();
+        }
+
         return cart;
+    }
+
+    async setProductQuantity(cartId, productId, quantity) {
+        const cart = await cartModel.findOne({ _id: cartId });
+
+        const product = cart.products.find((mongoProduct) => {
+            return mongoProduct.product.id == productId;
+        });
+
+        if (!product) {
+            throw new Error('the product is not present in the cart');
+        }
+        product.quantity = quantity;
+
+        await cart.save();
+        return cart;
+    }
+
+    async updateCartWithProducts(cartId, products) {
+        const cart = await cartModel.findOne({ _id: cartId });
+        if (!cart) {
+            throw new Error(`the specified cart does not exist`)
+        }
+
+        cart.products = [];
+
+        for (const product of products) {
+            const { product: productId, quantity } = product;
+            cart.products.push({
+                product: new Types.ObjectId(productId),
+                quantity
+            });
+        }
+
+        await cart.save();
+        //  i fetch the product again, so the products array is populated with the schema specification
+        return cartModel.findOne({ _id: cartId });
     }
 }
 
