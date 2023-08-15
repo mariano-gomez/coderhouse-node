@@ -39,14 +39,15 @@
             </div>
           </div>
         </div>
-
           {{{body}}}
       </div>
     </div>
 
-
-    <!--This probably should be, for the first time, on the specific template that will use sockets,
-    but considering future implementations, I just put it here now-->
+    {{#if cid}}
+        <script>
+            const cartId = '{{cid}}';
+        </script>
+    {{/if}}
     <script src="/socket.io/socket.io.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/uikit@3.11.1/dist/js/uikit.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/uikit@3.11.1/dist/js/uikit-icons.min.js"></script>

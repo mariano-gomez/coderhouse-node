@@ -32,7 +32,6 @@ function fetchPage(link) {
 
 //  It renders the product list, cleaning the old one, and adding one card for each product in the argument
 function renderProductsList(productsList) {
-    console
     productsEl.innerHTML = '';
     for (const product of productsList) {
         productsEl.innerHTML += `
@@ -45,6 +44,11 @@ function renderProductsList(productsList) {
                         <h3 class="uk-card-title">${product.title}</h3>
                         <h5>USD ${product.price}</h5>
                         <p>${product.description }</p>
+                        <form method="post" action="/cart/${cartId}/product/${product.id}/add">
+                            <button type="submit" class="uk-button uk-button-secondary uk-button-small">
+                                Agregar al carrito
+                            </button>
+                        </form>
                     </div>
                 </div>
             </div>

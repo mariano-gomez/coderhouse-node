@@ -27,6 +27,14 @@ router.get('/cart/:cid', async (req, res) => {
     });
 });
 
+router.post('/cart/:cid/product/:pid/add', async (req, res) => {
+    const { cid, pid } = req.params;
+
+    await cartManager.addProduct(cid, pid);
+
+    res.redirect('back');
+});
+
 router.get('/cart/:cid/product/:pid/delete', async (req, res) => {
     const { cid, pid } = req.params;
     try {
