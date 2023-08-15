@@ -23,6 +23,14 @@ class ProductManager {
     }
 
     getPaginated(queryObject, pageSize, page, sort) {
+        queryObject = queryObject || '{}';
+        try {
+            //  just to check if `queryObject` is a valid JSON
+            queryObject = JSON.parse(queryObject);
+        } catch (e) {
+            throw new Error('query is malformed. Please send a syntactically correct JSON');
+            return;
+        }
 
         let options = {
             limit: pageSize,
