@@ -17,9 +17,11 @@
               <li class="uk-active">
                   <a href="/realtimeproducts">Real Time</a>
               </li>
-<!--            <li>-->
-<!--              <a href="/cart">Carrito<span id="cart-badge" class="uk-label">0</span></a>-->
-<!--            </li>-->
+              {{#if cid}}
+                <li>
+                  <a href="/cart/{{cid}}">Carrito</a>
+                </li>
+              {{/if}}
               <li>
                   <a href="/chat">Chat</a>
               </li>

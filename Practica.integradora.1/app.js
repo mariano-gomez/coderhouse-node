@@ -6,6 +6,8 @@ const { Server, Socket } = require('socket.io');
 const mongoose = require('mongoose');
 
 const dependencyContainer = require('./dependency.injection');
+const attachUserToRequestMiddleware = require('./middlewares/attach.user.to.request.middleware');
+const attachCartToRequestMiddleware = require('./middlewares/attach.cart.to.request.middleware');
 
 //  TODO: temporal, until we add user management
 const userModel = require('./dao/models/user.model');
@@ -39,21 +41,10 @@ async function startServer() {
 
     //  once i connect to the DB, i fetch a user
     //  Until we start working with users, we temporarily hardcode a mockup user
-    app.use(async (req, res, next) => {
-        let user = await userModel.findOne();
-        if (!user) {
-            user = await userModel.create({
-                firstname: 'Mariano',
-                lastname: 'Gomez',
-                email: 'marianogomez@gmail.com',
-                password: 'myPassword',
-                role: 'admin',
-            });
-        }
-        req.user = user;
+    app.use(attachUserToRequestMiddleware);
 
-        next();
-    });
+    //  This middleware is made to have the logged user's cart in the request (just the id, not the whole cart)
+    app.use(attachCartToRequestMiddleware);
 
 //  setting the routes
     const { apiRoutes, standardRoutes } = require('./routes');

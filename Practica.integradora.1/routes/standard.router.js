@@ -1,5 +1,6 @@
 const Router = require('express');
 const productManager = require('../dao/db/product.manager');
+const cartManager = require('../dao/db/cart.manager');
 
 const { createProductValidatorMiddleware } = require('../middlewares/ProductValidator.middleware');
 
@@ -8,7 +9,8 @@ const router = Router();
 router.get('/', async (req, res) => {
     const products = await productManager.getAll();
     res.render('home', {
-        products
+        products,
+        cid: req.cart?.id
     });
 });
 
@@ -38,6 +40,7 @@ router.get('/cart/:cid/product/:pid/delete', async (req, res) => {
 
 router.get('/chat', async (req, res) => {
     res.render('chat', {
+        cid: req.cart?.id
     });
 });
 
@@ -45,7 +48,6 @@ router.post('/products',
     //  kind of middleware patch, to force the `status` field (if it comes) to be casted into boolean.
     // Otherwise, it will fail in the following validation middleware
     (req, res, next) => {
-    console.log(req.body.status);
     if (req.body.status != undefined) {
         req.body.status = (req.body.status === "true");
     }
@@ -65,7 +67,8 @@ router.post('/products',
 router.get('/realtimeproducts', async (req, res) => {
     const products = await productManager.getAll();
     res.render('realTimeProducts', {
-        products
+        products,
+        cartId: req.cart?.id
     });
 });
 
