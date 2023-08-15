@@ -1,9 +1,7 @@
 <div id="products" class="uk-child-width-1-4@m" uk-grid>
+
 </div>
 
-<hr>
-<a href="#" style="display: none;" id="prevPage">Pagina previa</a>
-<a href="#" style="display: none;" id="nextPage">Pagina siguiente</a>
 <hr>
 
 <h2>Agregar producto</h2>
@@ -42,10 +40,8 @@
         </div>
         <input type="hidden" name="category" value="category A" id="category"/>
         <input type="hidden" name="status" value="false" id="status"/>
-
-        <button class="uk-button uk-button-secondary uk-button-small uk-margin-top" type="submit">Agregar</button>
+        <button class="uk-button uk-button-secondary uk-button-small uk-margin-top" type="button" onclick="socketBehavior.createProduct()">Agregar</button>
     </form>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-<script src="/static/js/home.js" defer></script>
+<script src="/static/js/realTimeProducts.js" defer></script>
