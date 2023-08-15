@@ -1,28 +1,9 @@
 <div id="products" class="uk-child-width-1-4@m" uk-grid>
-    {{#each products}}
-        <div>
-            <div class="uk-card uk-card-default">
-                <div class="uk-card-media-top">
-                    <img alt="foto producto" />
-                </div>
-                <div class="uk-card-body">
-                    <h3 class="uk-card-title">{{this.title}}</h3>
-                    <h5>USD ${{ this.price }}</h5>
-                    {{#each this.keywords}}
-                        <span class="uk-badge">{{ this }}</span>
-                    {{/each}}
-                    <p>{{ this.description }}</p>
-                    <button class="uk-button uk-button-secondary uk-button-small">
-                        <a href="/products/delete/{{this.id}}">
-                            Eliminar
-                        </a>
-                    </button>
-                </div>
-            </div>
-        </div>
-    {{/each}}
 </div>
 
+<hr>
+<a href="#" style="display: none;" id="prevPage">Pagina previa</a>
+<a href="#" style="display: none;" id="nextPage">Pagina siguiente</a>
 <hr>
 
 <h2>Agregar producto</h2>
@@ -65,3 +46,6 @@
         <button class="uk-button uk-button-secondary uk-button-small uk-margin-top" type="submit">Agregar</button>
     </form>
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="/static/js/home.js" defer></script>

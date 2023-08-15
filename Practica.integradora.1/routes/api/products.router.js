@@ -31,7 +31,7 @@ router.get('/', async (req, res) => {
         limit = limit > 0 ? limit : 10;
 
         const paginatedProductsResponse = await productManager.getPaginated(query, limit, page, sort);
-        const hostname = `${req.protocol}://${req.get('host')}`;
+        const hostname = `${req.protocol}://${req.get('host')}/api/products/`;
 
         res.send({
             'status': 'success',
