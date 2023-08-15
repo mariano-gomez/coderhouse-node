@@ -18,9 +18,22 @@ class ProductManager {
         return newProduct;
     }
 
-    //  TODO: Explain why async/await is not needed (and remove it from code)
-    async getAll() {
-        return await productModel.find().lean();
+    getAll() {
+        return productModel.find().lean();
+    }
+
+    getPaginated(queryObject, pageSize, page, sort) {
+
+        let options = {
+            limit: pageSize,
+            page: page,
+            lean: true,
+        };
+
+        if (sort) {
+            options.sort = { price: sort };
+        }
+        return productModel.paginate(queryObject, options);
     }
 
     async getById(productId) {
