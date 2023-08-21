@@ -5,7 +5,8 @@ const schema = new Schema({
     lastname: String,
     email: String,
     password: String,
-    role: String,
+    age: Number,
+    // role: String,    //  not yet
     createdDate: { type: Number, default: Date.now() }
 });
 
