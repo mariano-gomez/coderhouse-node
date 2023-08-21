@@ -50,6 +50,9 @@ router.get('/cart/:cid/product/:pid/delete', async (req, res) => {
 });
 
 router.get('/chat', isAuth, async (req, res) => {
+
+    res.cookie('user', req.session.user.firstname);
+
     res.render('chat', {
         user: req.session?.user,
         cid: req.session?.cart?._id

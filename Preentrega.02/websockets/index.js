@@ -11,6 +11,11 @@ async function socketManagerFunction(socket) {
         });
     });
 
+    //  chat related events
+    console.log(`user has connected: ${socket.id}`);
+
+    const messages = await chatMessageManager.getAll();
+    socket.emit('chat-messages', messages);
 
     //  Product related events
     socket.on('product.create', async (product) => {
@@ -40,13 +45,6 @@ async function socketManagerFunction(socket) {
 
         //  I don't emit anything here, because the emit part is already done within the delete() method
     });
-
-
-    //  chat related events
-    console.log(`user has connected: ${socket.id}`);
-
-    const messages = await chatMessageManager.getAll();
-    socket.emit('chat-messages', messages);
 
     socket.on('chat-message', async (msg) => {
         await chatMessageManager.create(msg);
