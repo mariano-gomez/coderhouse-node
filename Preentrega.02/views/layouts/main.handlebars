@@ -22,9 +22,36 @@
                   <a href="/cart/{{cid}}">Carrito</a>
                 </li>
               {{/if}}
-              <li>
-                  <a href="/chat">Chat</a>
-              </li>
+              {{#if user}}
+                  <li>
+                      <a href="/chat">Chat</a>
+                  </li>
+              {{/if}}
+
+              {{#if user}}
+                  <li>
+                      <a>Bienvenido, {{user.name}}!</a>
+                      <div class="uk-navbar-dropdown">
+                          <ul class="uk-nav uk-navbar-dropdown-nav">
+                              <li>
+                                  <a href="#">Perfil</a>
+                              </li>
+                              {{#if user.isAdmin}}
+                                  <li>
+                                      <a href="/admin/product/add">Admin</a>
+                                  </li>
+                              {{/if}}
+                              <li>
+                                  <a href="/logout">Logout</a>
+                              </li>
+                          </ul>
+                      </div>
+                  </li>
+              {{else}}
+                  <li>
+                      <a href="/login">Inicia Sesion</a>
+                  </li>
+              {{/if}}
           </ul>
         </div>
       </nav>
