@@ -98,6 +98,10 @@ class CartManager {
         //  i fetch the product again, so the products array is populated with the schema specification
         return cartModel.findOne({ _id: cartId });
     }
+
+    async getByUser(userId) {
+        return cartModel.findOne({user: new Types.ObjectId(userId)}).lean();
+    }
 }
 
 module.exports = new CartManager();

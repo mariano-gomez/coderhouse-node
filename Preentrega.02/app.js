@@ -48,10 +48,11 @@ async function startServer() {
     console.log('DB CONNECTED');
 
 //  setting the routes
-    const { apiRoutes, standardRoutes } = require('./routes');
+    const { apiRoutes, standardRoutes, authRoutes } = require('./routes');
     app.use('/api', apiRoutes);
 
 //  To send an error response for any URL not supported
+    app.use('/', authRoutes);
     app.use('/', standardRoutes);
 
     //  enabling websockets activity

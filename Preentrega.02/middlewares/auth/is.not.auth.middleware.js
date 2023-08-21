@@ -1,6 +1,7 @@
 function isNotAuth(req, res, next) {
-  if (!req.session?.user) {
+  if (!Boolean(req.session?.user)) {
     next();
+    return;
   }
   res.redirect('back');
 }
