@@ -1,20 +1,22 @@
 const Router = require('express');
 const productManager = require('../dao/db/product.manager');
 const cartManager = require('../dao/db/cart.manager');
+const isAuth = require('../middlewares/auth/is.auth.middleware');
 
 const { createProductValidatorMiddleware } = require('../middlewares/ProductValidator.middleware');
 
 const router = Router();
 
-router.get('/', async (req, res) => {
+router.get('/', isAuth, async (req, res) => {
     const products = await productManager.getAll();
     res.render('home', {
         products,
-        cid: req.cart?.id
+        user: req.session?.user,
+        cid: req.session?.cart?._id
     });
 });
 
-router.get('/cart/:cid', async (req, res) => {
+router.get('/cart/:cid', isAuth, async (req, res) => {
     const { cid } = req.params;
     const cart = await cartManager.getById(cid);
 
@@ -23,7 +25,8 @@ router.get('/cart/:cid', async (req, res) => {
 
     res.render('cart', {
         products,
-        cid
+        user: req.session?.user,
+        cid: cid
     });
 });
 
@@ -46,9 +49,10 @@ router.get('/cart/:cid/product/:pid/delete', async (req, res) => {
     res.redirect(`/cart/${cid}`);
 });
 
-router.get('/chat', async (req, res) => {
+router.get('/chat', isAuth, async (req, res) => {
     res.render('chat', {
-        cid: req.cart?.id
+        user: req.session?.user,
+        cid: req.session?.cart?._id
     });
 });
 
@@ -72,11 +76,12 @@ router.post('/products',
     }
 });
 
-router.get('/realtimeproducts', async (req, res) => {
+router.get('/realtimeproducts', isAuth, async (req, res) => {
     const products = await productManager.getAll();
     res.render('realTimeProducts', {
         products,
-        cartId: req.cart?.id
+        user: req.session?.user,
+        cartId: req.session?.cart?._id  //  TODO: refactorizar `cartId` por `cid`
     });
 });
 
