@@ -4,13 +4,17 @@ const path = require('path');
 const handlebars = require('express-handlebars');
 const { Server, Socket } = require('socket.io');
 const mongoose = require('mongoose');
+const cookieParser = require('cookie-parser');
+const session = require('express-session');
+const MongoStore = require('connect-mongo');
 
-const dependencyContainer = require('./dependency.injection');
 const attachUserToRequestMiddleware = require('./middlewares/attach.user.to.request.middleware');
 const attachCartToRequestMiddleware = require('./middlewares/attach.cart.to.request.middleware');
 
 //  TODO: temporal, until we add user management
 const userModel = require('./dao/models/user.model');
+const dependencyContainer = require('./dependency.injection');
+const mongoConnectionString = 'mongodb+srv://coderhose_app:OUQoVf5WZ54IoRKL@cluster0.u8oklk1.mongodb.net/desarrollo_ecommerce?retryWrites=true&w=majority';
 
 const app = express();
 const server = http.createServer(app);
@@ -24,19 +28,30 @@ app.set('view engine', 'handlebars');
 
 //  eventually, i'll need to emit events from different places, so i need a unique place where i can fetch socket.io
 dependencyContainer.set('io', io);
+dependencyContainer.set('mongoConnectionString', mongoConnectionString);
 
 //  Some global configs
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use('/static', express.static(path.join(__dirname + '/public')));
+app.use(cookieParser());
+app.use(session({
+    secret: 'app.secret',
+    resave: true,
+    saveUninitialized: true,
 
+    store: MongoStore.create({
+        mongoUrl: mongoConnectionString,
+        ttl: 60 * 60 //  in secs. After this time, the session gets removed from the DB (if the user interacts in any way, the date gets updated)
+    })
+}));
 
 const socketManagerFunction = require('./websockets');
 const {apiRoutes, standardRoutes} = require("./routes");
 const productModel = require("./dao/models/product.model");
 
 async function startServer() {
-    await mongoose.connect("mongodb+srv://coderhose_app:OUQoVf5WZ54IoRKL@cluster0.u8oklk1.mongodb.net/entregas_ecommerce?retryWrites=true&w=majority");
+    await mongoose.connect(mongoConnectionString);
     console.log('DB CONNECTED');
 
     //  once i connect to the DB, i fetch a user
