@@ -29,6 +29,7 @@ npm start
     - `public/` archivos css y javascript
     - `scripts/` contiene scripts que eventualmente pueden facilitar la tarea de rellenar la DB con informacion
     - `routes/` contiene los manejadores para todas las rutas contempladas del proyecto
+    - `scripts/` contiene un script para "sembrar" de datos la tabla de productos
     - `views/` plantillas handlebars
     - `websockets/` codigo vinculado al comportamiento del server con websockets
     - `app.js` el archivo principal del proyecto
@@ -41,13 +42,24 @@ npm start
     - `[GET] /api/products/:pid` Si existe, muestra la información del producto especificado
     - `[POST] /api/products` Crea un nuevo producto
     - `[PUT] /api/products/:pid` Edita el producto especificado
-    - `[delete] /api/products/:pid` Elimina de la persistencia el producto especificado
+    - `[DELETE] /api/products/:pid` Elimina de la persistencia el producto especificado
   - `carts`
     - `[GET] /api/carts/:cid` Obtiene el contenido (ids de productos y cantidad de cada uno) del carrito especificado
     - `[POST] /api/carts` Crea un nuevo carrito vacío
     - `[POST] /api/carts/:cid/product/:pid` Si el producto no existe en el carrito, lo agrega con una cantidad de 1 unidad. Si ya estaba cargado en el carrito, aumenta su cantidad en 1 unidad
+    - `[DELETE] /api/carts/:cid/product/:pid` Elimina el producto con id `:pid` del carrito con id `:cid`
+    - `[DELETE] /api/carts/:cid` Elimina todos los productos del carrito con id `:cid`
+    - `[PUT] /api/carts/:cid/products/:pid` Ajusta la cantidad de productos con id `:pid` en el carrito con id `:cid`
+    - `[PUT] /api/carts/:cid` Elimina todo el contenido anterior del carrito con id `:cid` y lo reemplaza por el contenido de la peticion
 
 ## Urls
   - `[GET] /` Pagina "home", que muestra el listado de productos existentes hasta el momento 
   - `[GET] /realtimeproducts` Pagina "home", que muestra el listado de productos existentes hasta el momento en tiempo real (utilizando websockets) 
   - `[GET] /chat` Pagina desde donde se podra ingresar a un chat basico, utilizando websockets para materializar la funcionalidad 
+  - `[GET] /login` Pagina desde donde loguearse con un usuario preexistente en la DB 
+  - `[POST] /login` Envio de las credenciales de login para autenticarse 
+  - `[GET] /signup` Pagina para registrar un nuevo usuario 
+  - `[POST] /signup` Envio de los datos del nuevo usuario que se quiere crear 
+  - `[GET] /profile` Pagina para ver la informacion en el sistema del usuario logueado actualmente (redirecciona si no hay usuario logueado) 
+  - `[GET] /logout` Enlace para cerrar sesion. Debe redireccionar a `/login` 
+  - `[GET] /cart/:id` Pagina para ver los productos cargados en el carrito del usuario logueado actualmente (redirecciona si no hay usuario logueado)
