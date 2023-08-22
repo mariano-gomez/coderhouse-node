@@ -9,7 +9,7 @@ const session = require('express-session');
 const MongoStore = require('connect-mongo');
 
 const dependencyContainer = require('./dependency.injection');
-const mongoConnectionString = 'mongodb+srv://coderhose_app:OUQoVf5WZ54IoRKL@cluster0.u8oklk1.mongodb.net/desarrollo_ecommerce?retryWrites=true&w=majority';
+const mongoConnectionString = 'mongodb+srv://coderhose_app:OUQoVf5WZ54IoRKL@cluster0.u8oklk1.mongodb.net/entregas_ecommerce?retryWrites=true&w=majority';
 
 const app = express();
 const server = http.createServer(app);
