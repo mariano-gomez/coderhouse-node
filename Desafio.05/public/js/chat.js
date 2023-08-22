@@ -90,7 +90,7 @@ if (cookies.user) {
 
     socket.emit('chat-message', msg);
     target.value = "";
-    appendMessageElement(username, fecha.toLocaleTimeString('en-US'), value);
+    appendMessageElement(username, date.toLocaleTimeString('en-US'), value);
   });
 }
 
