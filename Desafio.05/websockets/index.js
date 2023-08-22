@@ -14,9 +14,6 @@ async function socketManagerFunction(socket) {
     //  chat related events
     console.log(`user has connected: ${socket.id}`);
 
-    const messages = await chatMessageManager.getAll();
-    socket.emit('chat-messages', messages);
-
     //  Product related events
     socket.on('product.create', async (product) => {
         const error = socketProductValidator(product);
@@ -77,6 +74,9 @@ async function socketManagerFunction(socket) {
     // })
     // socket.join('room1')
     // socket.to('room1').emit('msg')
+
+    const messages = await chatMessageManager.getAll();
+    socket.emit('chat-messages', messages);
 }
 
 module.exports = socketManagerFunction;

@@ -19,7 +19,7 @@ router.post('/login', isNotAuth, async (req, res) => {
     try {
         const user = await userManager.getByEmail(email);
         const role = (email == 'adminCoder@coder.com' && password == 'adminCod3r123') ? 'admin' : 'usuario';
-        if (!user) {
+        if (!user || user.password != password) {
             throw new Error(`El usuario no existe, o la contraseña es incorrecta`);
         }
 
@@ -36,7 +36,9 @@ router.post('/login', isNotAuth, async (req, res) => {
         //  si por alguna razon no se guarda lo q tenemos mas arriba, tenemos q usar el sgte `save()` (cuando usamos FileStore)
         req.session.save((err) => {
             if (!err) {
-                res.redirect('/')
+                res
+                    .cookie('user', req.session.user.firstname)
+                    .redirect('/')
             } else {
                 throw new Error(err);
             }
@@ -108,11 +110,15 @@ router.get('/logout', isAuth, (req, res) => {
             return res.redirect('back');
         }
 
-        res.render('users/logout', {
-            user: {
-                name: userData.firstname
-            }
-        });
+        res
+            .clearCookie('user')
+            .redirect('/login');
+        //  I leave this, in case we desire to use a customized login good bye page
+        // res.render('users/logout', {
+        //     user: {
+        //         name: userData.firstname
+        //     }
+        // });
     });
 });
 
