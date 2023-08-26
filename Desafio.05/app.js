@@ -7,9 +7,11 @@ const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const MongoStore = require('connect-mongo');
+const passport = require('passport');
 
 const dependencyContainer = require('./dependency.injection');
 const mongoConnectionString = 'mongodb+srv://coderhose_app:OUQoVf5WZ54IoRKL@cluster0.u8oklk1.mongodb.net/entregas_ecommerce?retryWrites=true&w=majority';
+const bindPassportStrategies = require('./config/passport.init.config');
 
 const app = express();
 const server = http.createServer(app);
@@ -40,6 +42,13 @@ app.use(session({
         ttl: 60 * 60 //  in secs. After this time, the session gets removed from the DB (if the user interacts in any way, the date gets updated)
     })
 }));
+
+//  assemble passport strategies to the app
+bindPassportStrategies();
+
+//  boilerplate passport initialization
+app.use(passport.initialize());
+app.use(passport.session());
 
 const socketManagerFunction = require('./websockets');
 

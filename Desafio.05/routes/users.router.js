@@ -1,4 +1,6 @@
 const Router = require('express');
+const passport = require('passport');
+
 const isAuth = require('../middlewares/auth/is.auth.middleware');
 const isNotAuth = require('../middlewares/auth/is.not.auth.middleware');
 const userManager = require('../dao/db/user.manager');
@@ -71,14 +73,13 @@ router.post('/signup', async (req, res) => {
             return;
         }
 
+        const role = (user.email == 'adminCoder@coder.com' && user.password == 'adminCod3r123') ? 'admin' : 'usuario';
         user.password = hashPassword(user.password);
         const newUser = await userManager.create(user);
 
-        const role = (user.email == 'adminCoder@coder.com' && user.password == 'adminCod3r123') ? 'admin' : 'usuario';
-
         req.session.user = {
-            name: newUser.firstname,
             id: newUser._id,
+            name: newUser.firstname,
             role,
             ...newUser._doc
         };
@@ -104,27 +105,55 @@ router.get('/profile', isAuth, (req, res) => {
     });
 });
 
-router.get('/logout', isAuth, (req, res) => {
+router.get('/github', passport.authenticate('github'), (req, res) => {});
 
-    const { user } = req.cookies;
+router.get('/githubSessions',
+    passport.authenticate('github', { failureRedirect: '/github/fail' }),
+    async (req, res) => {
+        const user = req.user;
+        req.session.user = {
+            id: user._id,
+            name: user.firstname,
+            role: (user.email == 'adminCoder@coder.com' && user.password == 'adminCod3r123') ? 'admin' : 'usuario',
+            email: user.email
+        };
+        req.session.cart = await cartManager.getByUser(user._id);
 
-    const userData = req.session.user;
+        req.session.save((err) => {
+            if (err) {
+                console.log(err);
+            }
+            res.redirect('/');
+        });
+    }
+);
 
-    req.session.destroy((err) => {
-        if(err) {
-            return res.redirect('back');
-        }
+const logoutCallback = (req, res) => {
+    if (req.user) {
+        //  req.user is only being set by passport. Therefore, if req.user exists, it is because the user has logged
+        //  with github
+        req.logOut((err) => {
+            if (err) {
+                res.redirect('/back');
+            } else {
+                res.redirect('/login');
+            }
+        });
+    } else {
+        //  If the user is logged via standard, classic form
+        req.session.destroy((err) => {
+            if(err) {
+                return res.redirect('back');
+            }
+            res.clearCookie('user').redirect('/login');
+        });
+    }
+};
 
-        res
-            .clearCookie('user')
-            .redirect('/login');
-        //  I leave this, in case we desire to use a customized login good bye page
-        // res.render('users/logout', {
-        //     user: {
-        //         name: userData.firstname
-        //     }
-        // });
-    });
+router.get('/logout', isAuth, logoutCallback);
+
+router.get('/github/fail', (req, res) => {
+    res.send('There has been an error. Try again later');
 });
 
 module.exports = router;
