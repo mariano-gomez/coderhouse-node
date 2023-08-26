@@ -26,6 +26,8 @@ router.post('/login', isNotAuth, async (req, res) => {
             throw new Error(`El usuario no existe, o la contraseña es incorrecta`);
         }
 
+        delete user.password;
+        
         req.session.user = {
             name: user.firstname,
             id: user._id,
@@ -115,7 +117,9 @@ router.get('/githubSessions',
             id: user._id,
             name: user.firstname,
             role: (user.email == 'adminCoder@coder.com' && user.password == 'adminCod3r123') ? 'admin' : 'usuario',
-            email: user.email
+            email: user.email,
+            firstname: user.firstname,
+            lastname: user.lastname,
         };
         req.session.cart = await cartManager.getByUser(user._id);
 
