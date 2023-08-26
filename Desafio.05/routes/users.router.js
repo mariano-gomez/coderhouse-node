@@ -3,6 +3,7 @@ const isAuth = require('../middlewares/auth/is.auth.middleware');
 const isNotAuth = require('../middlewares/auth/is.not.auth.middleware');
 const userManager = require('../dao/db/user.manager');
 const cartManager = require('../dao/db/cart.manager');
+const { hashPassword, isValidPassword } = require('../utils/password.encrypter.utils');
 
 // const { createProductValidatorMiddleware } = require('../middlewares/ProductValidator.middleware');
 
@@ -19,7 +20,7 @@ router.post('/login', isNotAuth, async (req, res) => {
     try {
         const user = await userManager.getByEmail(email);
         const role = (email == 'adminCoder@coder.com' && password == 'adminCod3r123') ? 'admin' : 'usuario';
-        if (!user || user.password != password) {
+        if (!user || !isValidPassword(password, user.password)) {
             throw new Error(`El usuario no existe, o la contraseña es incorrecta`);
         }
 
@@ -64,9 +65,13 @@ router.post('/signup', async (req, res) => {
         const existing = await userManager.getByEmail(user.email);
 
         if (existing) {
-            throw new Error('El email ya existe');
+            res.render('users/signup', {
+                error: 'El email ya existe'
+            });
+            return;
         }
 
+        user.password = hashPassword(user.password);
         const newUser = await userManager.create(user);
 
         const role = (user.email == 'adminCoder@coder.com' && user.password == 'adminCod3r123') ? 'admin' : 'usuario';
@@ -85,7 +90,7 @@ router.post('/signup', async (req, res) => {
             res.redirect('/');
         });
     } catch (e) {
-        return res.render('signup', {
+        return res.render('users/signup', {
             error: 'Ocurrio un error. Intentalo mas tarde'
         })
     }
