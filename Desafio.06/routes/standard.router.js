@@ -1,4 +1,5 @@
 const Router = require('express');
+const passport = require('passport');
 const productManager = require('../dao/db/product.manager');
 const cartManager = require('../dao/db/cart.manager');
 const isAuth = require('../middlewares/auth/is.auth.middleware');
@@ -11,8 +12,8 @@ router.get('/', isAuth, async (req, res) => {
     const products = await productManager.getAll();
     res.render('home', {
         products,
-        user: req.session?.user,
-        cid: req.session?.cart?._id
+        user: req.user,
+        cid: req.user?.cart?._id
     });
 });
 
@@ -25,7 +26,7 @@ router.get('/cart/:cid', isAuth, async (req, res) => {
 
     res.render('cart', {
         products,
-        user: req.session?.user,
+        user: req.user,
         cid: cid
     });
 });
@@ -52,8 +53,8 @@ router.get('/cart/:cid/product/:pid/delete', async (req, res) => {
 router.get('/chat', isAuth, async (req, res) => {
 
     res.render('chat', {
-        user: req.session?.user,
-        cid: req.session?.cart?._id
+        user: req.user,
+        cid: req.user?.cart?._id
     });
 });
 
@@ -81,8 +82,8 @@ router.get('/realtimeproducts', isAuth, async (req, res) => {
     const products = await productManager.getAll();
     res.render('realTimeProducts', {
         products,
-        user: req.session?.user,
-        cid: req.session?.cart?._id
+        user: req.user,
+        cid: req.user?.cart?._id
     });
 });
 

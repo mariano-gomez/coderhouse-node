@@ -1,5 +1,5 @@
 function isNotAuth(req, res, next) {
-  if (!Boolean(req.session?.user)) {
+  if (!req.isAuthenticated()) {
     next();
     return;
   }
