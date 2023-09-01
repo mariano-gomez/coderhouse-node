@@ -1,12 +1,13 @@
 const { Schema, model } = require('mongoose');
 
 const schema = new Schema({
-    firstname: String,
-    lastname: String,
+    first_name: String,
+    last_name: String,
     email: String,
     password: String,
     age: Number,
-    // role: String,    //  not yet
+    role: { type: String, default: 'user' },    //  not yet
+    cart: { type: Schema.Types.ObjectId, ref: 'carts' },
     createdDate: { type: Number, default: Date.now() }
 });
 

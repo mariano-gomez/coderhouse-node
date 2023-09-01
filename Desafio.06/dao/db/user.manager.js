@@ -26,21 +26,23 @@ class UserManager {
     }
 
     const {
-      firstname,
-      lastname,
+      first_name,
+      last_name,
       email,
       age,
       password,
-      // role   //  not yet
+      role,
+      cart
     } = user;
 
     await userModel.updateOne({ _id: id }, { $set: {
-      firstname,
-      lastname,
+      first_name,
+      last_name,
       email,
       age,
       password,
-      // role   //  not yet
+      role,
+      cart
     } });
   }
 

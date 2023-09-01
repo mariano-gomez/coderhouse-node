@@ -28,7 +28,7 @@ const bindPassportStrategies = () => {
         done(null, {
             role,
             cart,
-            name: user.firstname,
+            name: user.first_name,
             ...user
         });
     })

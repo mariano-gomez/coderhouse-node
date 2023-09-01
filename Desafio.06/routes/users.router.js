@@ -27,7 +27,7 @@ router.get('/profile', isAuth, (req, res) => {
 
 const loginHandler = (req, res) => {
     //  i don't set it in the `options` object, because i need to set the cookie
-    res.cookie('user', req.user.firstname).redirect('/profile');
+    res.cookie('user', req.user.first_name).redirect('/profile');
 };
 
 router.post('/login', isNotAuth, passport.authenticate('local-login', {
