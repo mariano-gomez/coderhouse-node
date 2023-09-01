@@ -16,8 +16,12 @@ const signupStrategyCallback = async (req, email, password, done) => {
         return done(null, false);
     }
 
+
+    //  since these variables will be used within several try/catch blocks, i need to declare them outside and, therefore, as let, not as const
+    let newUser, cart;
+
     try {
-        const newUser = await userManager.create({
+        newUser = await userManager.create({
             ...user,
             email,
             password: hashPassword(password)
@@ -30,7 +34,7 @@ const signupStrategyCallback = async (req, email, password, done) => {
 
     try {
         //  The user is going to need a cart
-        const cart = await cartManager.create(newUser._id);
+        cart = await cartManager.create(newUser._id);
     } catch(e) {
         console.log('passport local strategy (signup): something went wrong');
         //  if there is a problem creating the cart, the user should be removed
