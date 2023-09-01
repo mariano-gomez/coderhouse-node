@@ -15,8 +15,11 @@ const gitHubStrategyCallback = async (accessToken, refreshToken, profile, done) 
         return done(new Error(`email is null. Check profile's email configuration`));
     }
 
+    //  since these variables will be used within several try/catch blocks, i need to declare them outside and, therefore, as let, not as const
+    let user, cart, newUser;
+
     try {
-        const user = await userManager.getByEmail(userData.email);
+        user = await userManager.getByEmail(userData.email);
     } catch (error) {
         return done(error);
     }
@@ -34,14 +37,14 @@ const gitHubStrategyCallback = async (accessToken, refreshToken, profile, done) 
                 gender: null
             }
 
-            const newUser = await userManager.create(newUserData);
+            newUser = await userManager.create(newUserData);
         } catch (error) {
             return done('passport github strategy: ' + error);
         }
 
         //  The user is going to need a cart
         try {
-            const cart = await cartManager.create(newUser._id);
+            cart = await cartManager.create(newUser._id);
         } catch(e) {
             console.log('passport local strategy (signup): something went wrong');
             //  if there is a problem creating the cart, the user should be removed
