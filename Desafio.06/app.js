@@ -9,9 +9,9 @@ const session = require('express-session');
 const MongoStore = require('connect-mongo');
 const passport = require('passport');
 
+const { SESSIONLESS, mongoConnectionString } = require('./config/global.variables.config');
 const dependencyContainer = require('./dependency.injection');
 const bindPassportStrategies = require('./config/passport.init.config');
-const mongoConnectionString = 'mongodb+srv://coderhose_app:OUQoVf5WZ54IoRKL@cluster0.u8oklk1.mongodb.net/entregas_ecommerce?retryWrites=true&w=majority';
 
 const app = express();
 const server = http.createServer(app);
@@ -32,23 +32,29 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use('/static', express.static(path.join(__dirname + '/public')));
 app.use(cookieParser());
-app.use(session({
-    secret: 'app.secret',
-    resave: true,
-    saveUninitialized: true,
 
-    store: MongoStore.create({
-        mongoUrl: mongoConnectionString,
-        ttl: 60 * 60 //  in secs. After this time, the session gets removed from the DB (if the user interacts in any way, the date gets updated)
-    })
-}));
+if (!SESSIONLESS) {
+    app.use(session({
+        secret: 'app.secret',
+        resave: true,
+        saveUninitialized: true,
+
+        store: MongoStore.create({
+            mongoUrl: mongoConnectionString,
+            ttl: 60 * 60 //  in secs. After this time, the session gets removed from the DB (if the user interacts in any way, the date gets updated)
+        })
+    }));
+}
 
 //  assemble passport strategies to the app
 bindPassportStrategies();
 
 //  boilerplate passport initialization
 app.use(passport.initialize());
-app.use(passport.session());
+
+if (!SESSIONLESS) {
+    app.use(passport.session());
+}
 
 const socketManagerFunction = require('./websockets');
 

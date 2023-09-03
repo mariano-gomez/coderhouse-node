@@ -1,5 +1,6 @@
 const cartModel = require('./../models/cart.model')
 const { Types } = require("mongoose");
+const userModel = require("../models/user.model");
 
 class CartManager {
 
@@ -101,6 +102,16 @@ class CartManager {
 
     async getByUser(userId) {
         return cartModel.findOne({user: new Types.ObjectId(userId)}).lean();
+    }
+
+    async delete(id) {
+        const existing = await this.getById(id);
+
+        if (!existing) {
+            return;
+        }
+
+        await cartModel.deleteOne({ _id: id });
     }
 }
 
