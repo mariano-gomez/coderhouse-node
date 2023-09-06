@@ -1,0 +1,29 @@
+{{#if products}}
+    <div id="products" class="uk-child-width-1-4@m" uk-grid>
+        {{#each products}}
+
+            <div>
+                <div class="uk-card uk-card-default">
+                    <div class="uk-card-media-top">
+                        <img alt="foto producto" />
+                    </div>
+                    <div class="uk-card-body">
+                        <h3 class="uk-card-title">{{this.product.title}}</h3>
+                        <h5>USD ${{ this.product.price }}</h5>
+                        <p>{{ this.product.description }}</p>
+                        <h5>Unidades cargadas: {{ this.quantity }}</h5>
+                        <button class="uk-button uk-button-secondary uk-button-small">
+                            <a href="/cart/{{ ../cid }}/product/{{this.product._id}}/delete">
+                                Eliminar
+                            </a>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        {{/each}}
+    </div>
+{{else}}
+    <h1>No hay productos cargados en este carrito</h1>
+{{/if}}
+
+<hr>
