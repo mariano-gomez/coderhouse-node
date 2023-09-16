@@ -1,6 +1,13 @@
+const { Command } = require('commander');
+const dotenv = require('dotenv');
+const path = require('path');
+
+const program = new Command();
+
+loadDotEnvVariables();
+
 const express = require('express');
 const http = require('http');
-const path = require('path');
 const handlebars = require('express-handlebars');
 const { Server, Socket } = require('socket.io');
 const mongoose = require('mongoose');
@@ -9,7 +16,9 @@ const session = require('express-session');
 const MongoStore = require('connect-mongo');
 const passport = require('passport');
 
-const { SESSIONLESS, mongoConnectionString } = require('./config/global.variables.config');
+//  I could use `process.env.<variableName> directly, but the requirements says i need to create a `confing.js` file, so i did it according to what we did in the course
+const _dotenv = require('./config/config');
+
 const dependencyContainer = require('./dependency.injection');
 const bindPassportStrategies = require('./config/passport.init.config');
 
@@ -25,13 +34,16 @@ app.set('view engine', 'handlebars');
 
 //  eventually, i'll need to emit events from different places, so i need a unique place where i can fetch socket.io
 dependencyContainer.set('io', io);
-dependencyContainer.set('mongoConnectionString', mongoConnectionString);
+dependencyContainer.set('mongoConnectionString', _dotenv.MONGO_URL);
 
 //  Some global configs
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use('/static', express.static(path.join(__dirname + '/public')));
 app.use(cookieParser());
+
+//  This variable is meant to be useful if/when I implement jwt as an option. At that point, it will be included in the .env file, for now, it is hardcoded
+const SESSIONLESS = false;
 
 if (!SESSIONLESS) {
     app.use(session({
@@ -40,7 +52,7 @@ if (!SESSIONLESS) {
         saveUninitialized: true,
 
         store: MongoStore.create({
-            mongoUrl: mongoConnectionString,
+            mongoUrl: _dotenv.MONGO_URL,
             ttl: 60 * 60 //  in secs. After this time, the session gets removed from the DB (if the user interacts in any way, the date gets updated)
         })
     }));
@@ -59,7 +71,7 @@ if (!SESSIONLESS) {
 const socketManagerFunction = require('./websockets');
 
 async function startServer() {
-    await mongoose.connect(mongoConnectionString);
+    await mongoose.connect(_dotenv.MONGO_URL);
     console.log('DB CONNECTED');
 
 //  setting the routes
@@ -75,11 +87,26 @@ async function startServer() {
         'connection', socketManagerFunction
     );
 
-    const port = 8080;
-
-    server.listen(port, () => {
+    server.listen(port = _dotenv.PORT, () => {
         console.log(`Express Server listening at http://localhost:${port}`);
     });
+}
+
+//  This function is meant to load all the variables from a `.env.<environment>`, using `dotenv` and `commander` packages
+//  later, we'll import these variables from `/config/config.js`, even though we could do it directly through env.process.<variableName>
+function loadDotEnvVariables() {
+
+    program.option('-e, --env <env>', 'Entorno de ejecucion', 'development');
+    program.parse();
+
+//  i'm taking the `env` attribute from the object retuned by `program.opts()`
+    const { env } = program.opts();
+
+//  This tells express to load the variables we defined on the `.env` file
+    dotenv.config({
+        path: path.join(__dirname, env === 'development' ? '.env.development' : '.env.production')
+    });
+    console.log(`Running on ${env} environment`);
 }
 
 startServer();
