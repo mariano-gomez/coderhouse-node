@@ -6,16 +6,18 @@ Este proyecto forma parte de una serie de iteraciones vinculadas al proyecto fin
 
 Los pasos para instalar el proyecto son los siguientes:
 - Descargar el repositorio, utilizando `git clone https://github.com/mariano-gomez/coderhouse-node.git`
-- ingresar a la carpeta del proyecto, y luego a la carpeta `Proyecto.final`
+- Ingresar a la carpeta de la entrega que se quiere analizar
 - Instalar las dependencias, ejecutando `npm install`, o `npm i`
-
+- Crear, al menos, un archivo `.env.production` con valores para las distintas variables de entorno. Se recomienda usar el archivo `.env` como guia, ya que si falta alguna de esas variables, el servidor no podrá funcionar (también puede crearse otro archivo `.env.development`)
 ## Uso
 
 Para utilizar el proyecto, hay que lanzar el servidor. Para esto, hay que ejecutar
-
 ```shell
-npm start
+npm run start:<env>
 ```
+`<env>` puede ser `prod` (requiere que exista un archivo `.env.production`) o `dev` (requiere que exista un archivo `.env.development`).
+Si se omite el environment, intentará iniciar en modo `production` por defecto
+Ejecutar `npm start` es el equivalente a ejecutar `npm run start:prod` 
 
 ## Características
 
@@ -37,7 +39,7 @@ npm start
     - `websockets/` código vinculado al comportamiento del server con websockets
     - `app.js` el archivo principal del proyecto
     - `dependency.injection.js` la idea de este archivo es centralizar las referencias a distintos recursos o servicios, para poder accederlos de forma facil desde cualquier lugar del sistema
-
+    - `.env.production | .env.development` archivo con las variables de entorno requeridas para que el servidor funcione (leer más en la sección "Uso")
 ## Endpoints
 
 - `products`

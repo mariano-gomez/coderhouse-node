@@ -8,7 +8,8 @@ const { LocalStrategy, signupStrategyCallback, loginStrategyCallback } = require
 const userManager = require('../dao/db/user.manager');
 const cartManager = require("../dao/db/cart.manager");
 
-const { SESSIONLESS } = require('../config/global.variables.config');
+//  This variable is meant to be useful if/when I implement jwt as an option. At that point, it will be included in the .env file, for now, it is hardcoded
+const SESSIONLESS = false;
 
 const bindPassportStrategies = () => {
 

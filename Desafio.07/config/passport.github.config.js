@@ -2,10 +2,13 @@ const GitHubStrategy = require('passport-github2');
 const userManager = require('../dao/db/user.manager');
 const cartManager = require('../dao/db/cart.manager');
 
+//  I could use `process.env.<variableName> directly, but the requirements says i need to create a `confing.js` file, so i did it according to what we did in the course
+const _dotenv = require('./config');
+
 const gitHubAppCredentials = {
-    clientID:       'Iv1.9d3533b922a6c031',
-    clientSecret:   'bb60d9378c871a9a8c8a750786c61da9cae3de62',
-    callbackURL:    "http://localhost:8080/githubSessions"
+    clientID:       _dotenv.GITHUB_CLIENT_ID,
+    clientSecret:   _dotenv.GITHUB_CLIENT_SECRET,
+    callbackURL:    _dotenv.GITHUB_CALLBACK_URL
 };
 
 const gitHubStrategyCallback = async (accessToken, refreshToken, profile, done) => {

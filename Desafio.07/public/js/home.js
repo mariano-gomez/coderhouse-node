@@ -28,8 +28,6 @@ function fetchPage(link) {
         });
 }
 
-// Hacer una llamada a una API usando Axios
-
 //  It renders the product list, cleaning the old one, and adding one card for each product in the argument
 function renderProductsList(productsList) {
     productsEl.innerHTML = '';
