@@ -14,13 +14,7 @@ class StandardController {
 
     static showCartPageById = async (req, res) => {
         const { cid } = req.params;
-        const cart = await cartManager.getById(cid);
-
-        //  in case the cart is empty
-        const products = cart?.products || [];
-
         res.render('cart', {
-            products,
             user: req.user,
             cid: cid
         });
