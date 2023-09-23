@@ -2,7 +2,11 @@
 class UsersController {
 
     static showLoginPage = (req, res) => {
-        res.render('users/login');
+        const errorMessages = req.session.messages;
+        delete req.session.messages;
+        res.render('users/login', {
+            errors: errorMessages
+        });
     };
 
     static showSignupPage = (req, res) => {

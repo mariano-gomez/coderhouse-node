@@ -15,7 +15,7 @@ const gitHubStrategyCallback = async (accessToken, refreshToken, profile, done) 
     const userData = profile._json;
 
     if (!userData.email) {
-        return done(new Error(`email is null. Check profile's email configuration`));
+        return done(null, false, { message: `email is null. Check profile's email configuration` });
     }
 
     //  since these variables will be used within several try/catch blocks, i need to declare them outside and, therefore, as let, not as const
@@ -24,7 +24,7 @@ const gitHubStrategyCallback = async (accessToken, refreshToken, profile, done) 
     try {
         user = await userManager.getByEmail(userData.email);
     } catch (error) {
-        return done(error);
+        return done(error.message, false);
     }
 
     if (!user) {
@@ -42,17 +42,17 @@ const gitHubStrategyCallback = async (accessToken, refreshToken, profile, done) 
 
             newUser = await userManager.create(newUserData);
         } catch (error) {
-            return done('passport github strategy: ' + error);
+            return done('passport github strategy: ' + error.message, false);
         }
 
         //  The user is going to need a cart
         try {
             cart = await cartManager.create(newUser._id);
         } catch(e) {
-            console.log('passport local strategy (signup): something went wrong');
+            console.log('passport github strategy: something went wrong');
             //  if there is a problem creating the cart, the user should be removed
             await userManager.delete(newUser._id);
-            done(e, false);
+            return done(e.message, false);
         }
 
         //  finally, link the cart to the user's data and return the user
@@ -73,8 +73,8 @@ const gitHubStrategyCallback = async (accessToken, refreshToken, profile, done) 
             //  if there is a problem linking the user and the cart, we need to remove both from the DB
             await userManager.delete(newUser._id);
             await cartManager.delete(cart._id);
-            console.log('passport local strategy (signup): something went wrong');
-            done(e, false);
+            console.log('passport github strategy: something went wrong');
+            return done(e.message, false);
         }
 
     }

@@ -24,7 +24,10 @@ router.get('/github', passport.authenticate('github', {
 }), (req, res) => {});
 
 router.get('/githubSessions',
-    passport.authenticate('github', { failureRedirect: '/github/fail' }),
+    passport.authenticate('github', {
+        failureRedirect: '/login',
+        failureMessage: true
+    }),
     UsersController.loginHandler
 );
 
