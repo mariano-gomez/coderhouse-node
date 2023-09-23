@@ -1,0 +1,48 @@
+<div class="uk-padding-large uk-child-width-1-1" uk-grid>
+    <h3>Inicia sesion</h3>
+    <form action="/login" method="post">
+        <div class="uk-margin">
+            <div class="uk-inline">
+                <span class="uk-form-icon" uk-icon="icon: user"></span>
+                <input name="email" class="uk-input" type="text" aria-label="Not clickable icon" placeholder="email">
+            </div>
+        </div>
+
+        <div class="uk-margin">
+            <div class="uk-inline">
+                <span class="uk-form-icon uk-form-icon-flip" uk-icon="icon: lock"></span>
+                <input name="password" class="uk-input" type="password" aria-label="Not clickable icon" placeholder="contraseña">
+            </div>
+        </div>
+
+        <div class="uk-margin">
+            <div class="uk-inline">
+                <span>
+                    Quiero ingresar usando
+                    <a href="/github">
+                        <img width="100" src="https://logodownload.org/wp-content/uploads/2019/08/github-logo-0.png" alt="GITHUB">
+                    </a>
+                </span>
+            </div>
+        </div>
+
+        <div class="uk-margin">
+            <div class="uk-inline">
+                <span>No tienes cuenta? <a href="/signup">Registrate!</a></span>
+            </div>
+        </div>
+
+        {{#if errors}}
+            {{#each errors}}
+                <div class="uk-margin">
+                    <div class="uk-inline">
+                        <span class="uk-form-danger">{{this}}</span>
+                    </div>
+                </div>
+            {{/each}}
+        {{/if}}
+
+
+        <button class="uk-button uk-button-default">Entrar</button>
+    </form>
+</div>

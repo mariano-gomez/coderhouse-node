@@ -1,0 +1,172 @@
+[
+  {
+    "id": 1,
+    "title": "Battlefield 6",
+    "description": "Epic first-person shooter",
+    "code": "BF6",
+    "price": 59.99,
+    "stock": 8,
+    "category": "Action",
+    "thumbnails": ["thumbnail1.jpg", "thumbnail2.jpg"]
+  },
+  {
+    "id": 2,
+    "title": "The Witcher 4",
+    "description": "Open-world RPG adventure",
+    "code": "WIT4",
+    "price": 49.99,
+    "stock": 8,
+    "category": "Adventure",
+    "thumbnails": ["thumbnail3.jpg", "thumbnail4.jpg"]
+  },
+  {
+    "id": 3,
+    "title": "Cyberpunk Revolution",
+    "description": "Dystopian sci-fi game",
+    "code": "CYBREV",
+    "price": 54.99,
+    "stock": 8,
+    "category": "RPG",
+    "thumbnails": ["thumbnail5.jpg", "thumbnail6.jpg"]
+  },
+  {
+    "id": 4,
+    "title": "Super Mario Odyssey 2",
+    "description": "Classic platformer sequel",
+    "code": "MARIO2",
+    "price": 49.99,
+    "stock": 8,
+    "category": "Platformer",
+    "thumbnails": ["thumbnail7.jpg", "thumbnail8.jpg"]
+  },
+  {
+    "id": 5,
+    "title": "Fortnite Legends",
+    "description": "Battle Royale extravaganza",
+    "code": "FNLGND",
+    "price": 0,
+    "stock": 8,
+    "category": "Action",
+    "thumbnails": ["thumbnail9.jpg", "thumbnail10.jpg"]
+  },
+  {
+    "id": 6,
+    "title": "Final Fantasy XVII",
+    "description": "JRPG adventure",
+    "code": "FF17",
+    "price": 49.99,
+    "stock": 8,
+    "category": "RPG",
+    "thumbnails": ["thumbnail37.jpg", "thumbnail38.jpg"]
+  },
+  {
+    "id": 7,
+    "title": "GTA VI",
+    "description": "Open-world crime spree",
+    "code": "GTA6",
+    "price": 59.99,
+    "stock": 8,
+    "category": "Action",
+    "thumbnails": ["thumbnail39.jpg", "thumbnail40.jpg"]
+  },
+  {
+    "id": 8,
+    "title": "Splatoon 3",
+    "description": "Ink-splatting mayhem",
+    "code": "SPL3",
+    "price": 49.99,
+    "stock": 8,
+    "category": "Shooter",
+    "thumbnails": ["thumbnail41.jpg", "thumbnail42.jpg"]
+  },
+  {
+    "id": 9,
+    "title": "Sims Universe",
+    "description": "Life simulation sandbox",
+    "code": "SIMSUN",
+    "price": 39.99,
+    "stock": 8,
+    "category": "Simulation",
+    "thumbnails": ["thumbnail43.jpg", "thumbnail44.jpg"]
+  },
+  {
+    "id": 10,
+    "title": "Uncharted: Lost Legacy",
+    "description": "Treasure-hunting adventure",
+    "code": "UNCHRT",
+    "price": 44.99,
+    "stock": 8,
+    "category": "Adventure",
+    "thumbnails": ["thumbnail45.jpg", "thumbnail46.jpg"]
+  },
+  {
+    "id": 11,
+    "title": "Destiny's Legacy",
+    "description": "Sci-fi multiplayer shooter",
+    "code": "DSTNYL",
+    "price": 49.99,
+    "stock": 8,
+    "category": "Shooter",
+    "thumbnails": ["thumbnail47.jpg", "thumbnail48.jpg"]
+  },
+  {
+    "id": 12,
+    "title": "Mario Kart 9",
+    "description": "Racing with Nintendo characters",
+    "code": "MK9",
+    "price": 49.99,
+    "stock": 8,
+    "category": "Racing",
+    "thumbnails": ["thumbnail49.jpg", "thumbnail50.jpg"]
+  },
+  {
+    "id": 13,
+    "title": "Far Cry 7",
+    "description": "Open-world action-adventure",
+    "code": "FC7",
+    "price": 54.99,
+    "stock": 8,
+    "category": "Action",
+    "thumbnails": ["thumbnail51.jpg", "thumbnail52.jpg"]
+  },
+  {
+    "id": 14,
+    "title": "Tom Clancy's Ghost Recon: Revolution",
+    "description": "Tactical military shooter",
+    "code": "GRREV",
+    "price": 54.99,
+    "stock": 8,
+    "category": "Shooter",
+    "thumbnails": ["thumbnail53.jpg", "thumbnail54.jpg"]
+  },
+  {
+    "id": 15,
+    "title": "Mass Effect: Andromeda",
+    "description": "Space exploration RPG",
+    "code": "MEA",
+    "price": 44.99,
+    "stock": 8,
+    "category": "RPG",
+    "thumbnails": ["thumbnail55.jpg", "thumbnail56.jpg"]
+  },
+  {
+    "id": 16,
+    "title": "Mortal Kombat XI",
+    "description": "Gory fighting game",
+    "code": "MKXI",
+    "price": 44.99,
+    "stock": 8,
+    "category": "Fighting",
+    "thumbnails": ["thumbnail57.jpg", "thumbnail58.jpg"]
+  },
+  {
+    "id": 17,
+    "title": "Rainbow Six: Siege",
+    "description": "Tactical multiplayer FPS",
+    "code": "R6S",
+    "price": 39.99,
+    "stock": 8,
+    "category": "Shooter",
+    "thumbnails": ["thumbnail59.jpg", "thumbnail60.jpg"]
+  }
+]
