@@ -32,12 +32,14 @@
             </div>
         </div>
 
-        {{#if error}}
-            <div class="uk-margin">
-                <div class="uk-inline">
-                    <span class="uk-form-danger">{{error}}</span>
+        {{#if errors}}
+            {{#each errors}}
+                <div class="uk-margin">
+                    <div class="uk-inline">
+                        <span class="uk-form-danger">{{this}}</span>
+                    </div>
                 </div>
-            </div>
+            {{/each}}
         {{/if}}
 
 
