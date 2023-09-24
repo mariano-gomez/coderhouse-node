@@ -1,4 +1,5 @@
-const cartManager = require("../../dao/db/cart.manager");
+const factory = require("../../dao/factory.dao");
+const cartManager = factory.getInstance('cart');
 
 class CartsApiController {
 

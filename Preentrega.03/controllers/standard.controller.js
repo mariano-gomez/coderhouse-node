@@ -1,5 +1,6 @@
-const productManager = require("../dao/db/product.manager");
-const cartManager = require("../dao/db/cart.manager");
+const factory = require("../dao/factory.dao");
+const productManager = factory.getInstance('product');
+const cartManager = factory.getInstance('cart');
 
 class StandardController {
 

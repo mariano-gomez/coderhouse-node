@@ -1,6 +1,5 @@
 const cartModel = require('./../models/cart.model')
 const { Types } = require("mongoose");
-const userModel = require("../models/user.model");
 
 class CartManager {
 
