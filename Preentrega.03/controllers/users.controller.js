@@ -1,3 +1,4 @@
+const UserDTO = require('../dao/dto/user.dto');
 
 class UsersController {
 
@@ -15,7 +16,7 @@ class UsersController {
 
     static showProfilePage = (req, res) => {
         res.render('users/profile', {
-            user: req.user,
+            user: UserDTO.parse(req.user),
             cid: req.user?.cart?._id,
             ...req.user
         });
