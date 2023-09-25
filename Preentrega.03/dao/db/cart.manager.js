@@ -3,8 +3,8 @@ const { Types } = require("mongoose");
 
 class CartManager {
 
-    getById(cartId) {
-        return cartModel.findOne({_id: new Types.ObjectId(cartId)}).lean();
+    async getById(cartId) {
+        return await cartModel.findOne({_id: new Types.ObjectId(cartId)}).lean();
     }
 
     async create(userId) {

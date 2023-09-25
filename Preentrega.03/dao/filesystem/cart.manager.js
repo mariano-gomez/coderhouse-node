@@ -9,7 +9,7 @@ class CartManager {
     constructor(filename) {
         this.#itemsFile = path.join(
             __dirname,
-            '../data',
+            '../../data',
             filename
         );
         this.#carts = [];
@@ -43,13 +43,14 @@ class CartManager {
         return cart;
     }
 
-    async create() {
+    async create(userId) {
         await this.#readFile();
 
         const id = (this.#carts[this.#carts.length - 1]?.id || 0) + 1;
 
         const newCart = {
             id,
+            user: userId,
             products: []    //  this array will contain objects with the form { productId, quantity }
         };
 
@@ -83,24 +84,92 @@ class CartManager {
         return cart;
     }
 
-    async update(id, newProductData) {
-        const oldProduct = await this.getById(id);
+    async clearCart(cartId) {
+        const cart = await this.getById(cartId);
+        if (cart) {
+            cart.products = [];
+        }
+        await this.#saveFile();
 
-        //  If the old product doesn't exists, I let the caller to know it doesn't exists, by returning a null value
-        if (!oldProduct) {
-            return null;
+        return cart;
+    }
+
+    async deleteProduct(cartId, productId) {
+        //  I set this object to respect the format already implemented by the controller while we were using mongoDB manager
+        const result = {
+            modifiedCount: 0,
+        }
+        const cart = await this.getById(cartId);
+
+        if (cart == null) {
+            return result;
         }
 
-        const productProperties = Object.getOwnPropertyNames(oldProduct);
-        for (const field of productProperties) {
-            if (newProductData[field] !== undefined) {
-                oldProduct[field] = newProductData[field];
-            }
+        const productsInCart = cart.products.length;
+
+        cart.products = cart.products.filter(prod => prod.id != productId);
+
+        //  if the product was present, the lengths will be different by 1. Otherwise, it will return 0
+        result.modifiedCount = productsInCart - cart.products.length;
+        return result;
+    }
+
+    async getByUser(userId) {
+        await this.#readFile();
+        const cart = this.#carts.find((cart) => {
+            return cart.user == userId;
+        });
+        if (!cart) {
+            return null;
+        }
+        return cart;
+    }
+
+    async delete(id) {
+        await this.#readFile();
+
+        this.#carts = this.#carts.filter(cart => cart.id != id);
+
+        await this.#saveFile();
+    }
+
+    async setProductQuantity(cartId, productId, quantity) {
+        const cart = await this.getById(cartId);
+
+        const product = cart.products.find((product) => {
+            return product.id == productId;
+        });
+
+        if (!product) {
+            throw new Error('the product is not present in the cart');
+        }
+        product.quantity = quantity;
+
+        await this.#saveFile();
+        return cart;
+    }
+
+    async updateCartWithProducts(cartId, products) {
+
+        const cart = await this.getById(cartId);
+        if (!cart) {
+            throw new Error(`the specified cart does not exist`)
+        }
+
+        cart.products = [];
+
+        for (const product of products) {
+            const { product: productId, quantity } = product;
+            cart.products.push({
+                product: productId,
+                quantity
+            });
         }
 
         await this.#saveFile();
-        return oldProduct;
+
+        return cart;
     }
 }
 
-module.exports = CartManager;
+module.exports = new CartManager('carts.json');
