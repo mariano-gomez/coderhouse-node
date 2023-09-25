@@ -18,11 +18,11 @@ class ProductManager {
         return newProduct;
     }
 
-    getAll() {
-        return productModel.find().lean();
+    async getAll() {
+        return await productModel.find().lean();
     }
 
-    getPaginated(queryObject, pageSize, page, sort) {
+    async getPaginated(queryObject, pageSize, page, sort) {
         queryObject = queryObject || '{}';
         try {
             //  just to check if `queryObject` is a valid JSON
@@ -41,7 +41,7 @@ class ProductManager {
         if (sort) {
             options.sort = { price: sort };
         }
-        return productModel.paginate(queryObject, options);
+        return await productModel.paginate(queryObject, options);
     }
 
     async getById(productId) {
