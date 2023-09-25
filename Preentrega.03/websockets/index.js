@@ -1,6 +1,6 @@
 const factory = require("../dao/factory.dao");
 const productManager = factory.getInstance('product');
-const chatMessageManager = require('../dao/db/chat.message.manager');
+const chatMessageManager = factory.getInstance('chat.message');
 
 const socketProductValidator = require('../middlewares/socket.middleware/socket.product.validator.middleware');
 
