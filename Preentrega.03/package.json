@@ -4,8 +4,8 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "start": "nodemon app.js --env production",
-    "start:dev": "nodemon app.js --env development",
+    "start": "nodemon app.js --env production --persist file",
+    "start:dev": "nodemon app.js --env development --persist mongo",
     "start:prod": "nodemon app.js --env production",
     "seed:products": "node ./scripts/seeder.products.js"
   },
