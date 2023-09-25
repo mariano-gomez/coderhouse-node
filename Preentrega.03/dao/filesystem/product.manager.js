@@ -2,6 +2,9 @@ const fs = require('fs/promises');
 const path = require('path');
 const dependencyContainer = require('../../dependency.injection');
 
+//  TODO: Not sure why it crashes when i don't add this line, even though i'm not using DB for products in this manager
+const productModel = require('./../models/product.model')
+
 class ProductManager {
 
     #products;
@@ -10,7 +13,7 @@ class ProductManager {
     constructor(filename) {
         this.#itemsFile = path.join(
             __dirname,
-            '../data',
+            '../../data',
             filename
         );
         this.#products = [];
@@ -127,6 +130,39 @@ class ProductManager {
         const io = dependencyContainer.get('io');
         io.sockets.emit('products.list.updated', await this.getAll());
     }
+
+    async getPaginated(queryObject, pageSize, page, sort) {
+        await this.#readFile();
+
+        let filteredItems = this.#products;
+        let totalItems;
+        if (queryObject) {
+            //  TODO: filter products according to queryObject elements
+        }
+        totalItems = filteredItems.length;
+
+        if (['-1', 'desc', 'DESC'].indexOf(sort) >= 0) {
+            filteredItems.sort(function compare(itemA, itemB) {
+                return itemB.id - itemA.id;
+            });
+        }
+
+        const docs = filteredItems.slice((page - 1) * pageSize, page * pageSize - 1);
+        const totalPages = Math.ceil(totalItems / pageSize);
+        const prevPage = page > 1 ? (page - 1) : null;
+        const nextPage = page < totalPages ? (page + 1) : null;
+
+        const response = {
+            docs,
+            totalPages,
+            prevPage,
+            nextPage,
+            page,
+            hasPrevPage: prevPage !== null,
+            hasNextPage: nextPage !== null,
+        };
+        return response;
+    }
 }
 
-module.exports = ProductManager;
+module.exports = new ProductManager('products.json');

@@ -7,11 +7,11 @@ class ChatMessageManager {
     #messages;
     #chatFile;
 
-    constructor() {
+    constructor(filename) {
         this.#chatFile = path.join(
             __dirname,
             '../../data',
-            'chat.messages.json'
+            filename
         );
         this.#messages = [];
     }
@@ -63,4 +63,4 @@ class ChatMessageManager {
     }
 }
 
-module.exports = new ChatMessageManager();
+module.exports = new ChatMessageManager('chat.messages.json');
