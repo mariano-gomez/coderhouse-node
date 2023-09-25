@@ -1,6 +1,7 @@
 const GitHubStrategy = require('passport-github2');
 const userManager = require('../dao/db/user.manager');
-const cartManager = require('../dao/db/cart.manager');
+const factory = require("../dao/factory.dao");
+const cartManager = factory.getInstance('cart');
 
 //  I could use `process.env.<variableName> directly, but the requirements says i need to create a `confing.js` file, so i did it according to what we did in the course
 const _dotenv = require('./config');

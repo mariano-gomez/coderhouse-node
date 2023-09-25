@@ -2,7 +2,8 @@ const local = require('passport-local');
 
 const userManager = require('../dao/db/user.manager');
 const { hashPassword, isValidPassword } = require('../utils/password.encrypter.utils');
-const cartManager = require("../dao/db/cart.manager");
+const factory = require("../dao/factory.dao");
+const cartManager = factory.getInstance('cart');
 
 const LocalStrategy = local.Strategy;
 

@@ -5,8 +5,9 @@ const { GitHubStrategy, gitHubStrategyCallback, gitHubAppCredentials } = require
 const { LocalStrategy, signupStrategyCallback, loginStrategyCallback } = require('./passport.local.config');
 
 //  managers
+const factory = require("../dao/factory.dao");
+const cartManager = factory.getInstance('cart');
 const userManager = require('../dao/db/user.manager');
-const cartManager = require("../dao/db/cart.manager");
 
 //  This variable is meant to be useful if/when I implement jwt as an option. At that point, it will be included in the .env file, for now, it is hardcoded
 const SESSIONLESS = false;
