@@ -37,4 +37,6 @@ router.put(
 //  It replaces all the products in the given cart, for the ones specified on the request
 router.put('/:cid', authorizeSelfCartUpdateOnly, CartsApiController.changeCartContent);
 
+router.get('/:cid/purchase', CartsApiController.purchase);
+
 module.exports = router;

@@ -1,5 +1,6 @@
 const factory = require("../../dao/factory.dao");
 const cartManager = factory.getInstance('cart');
+const ticketService = require('../../services/ticket.service');
 
 class CartsApiController {
 
@@ -103,9 +104,41 @@ class CartsApiController {
             const cartUpdated = await cartManager.updateCartWithProducts(cid, products);
             res.send(cartUpdated.products);
         } catch (e) {
-            res.status(400).send({ "error": e.message });
+            res.status(400).send({ 'status': "error", 'message': e.message });
         }
     };
+
+    static purchase = async (req, res) => {
+        const { cid } = req.params;
+
+        const cart = await cartManager.getById(cid);
+
+        if (!cart) {
+            res.status(404).send({ 'status': 'error', 'message': 'cart not found'});
+            return;
+        }
+
+        if (!cart.products.length) {
+            res.status(406).send({ 'status': 'error', 'message': 'the cart is empty'});
+            return;
+        }
+
+        const purchaseResponse = await ticketService.finishPurchase(cart);
+
+        if (purchaseResponse.ticket) {
+
+            //  send email
+
+            res.send({
+                'status': 'success',
+                'payload': purchaseResponse
+            });
+        } else if (!purchaseResponse.unavailable?.length) {
+            res.status(406).send({ 'status': "error", 'message': "There is no stock for any of your products" });
+        } else {
+            res.status(500).send({ 'status': "error", 'message': "something went wrong, please try again" });
+        }
+    }
 }
 
 module.exports = CartsApiController;
