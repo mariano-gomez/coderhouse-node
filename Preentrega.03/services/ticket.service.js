@@ -62,7 +62,7 @@ const finishPurchase = async (cart) => {
 const generateTicketCode = async () => {
     const lastTicket = await ticketManager.getLastTicket();
     if (!lastTicket) {
-        return 0;
+        return 1;
     }
     return lastTicket.code + 1;
 }
