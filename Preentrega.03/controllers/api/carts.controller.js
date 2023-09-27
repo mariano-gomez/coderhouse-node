@@ -1,6 +1,8 @@
 const factory = require("../../dao/factory.dao");
 const cartManager = factory.getInstance('cart');
 const ticketService = require('../../services/ticket.service');
+const mailSenderService = require("../../services/mail.sender.service");
+const MailRenderService = require("../../services/mail.render.service");
 
 class CartsApiController {
 
@@ -127,8 +129,13 @@ class CartsApiController {
 
         if (purchaseResponse.ticket) {
 
-            //  send email
+            const html = MailRenderService.renderTicket(purchaseResponse.ticket);
 
+            try {
+                await mailSenderService.send(purchaseResponse.ticket.purchaser, html, 'Nueva compra!');
+            } catch (e) {
+                console.log(e.message);
+            }
             res.send({
                 'status': 'success',
                 'payload': purchaseResponse
