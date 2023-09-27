@@ -19,10 +19,9 @@ const finishPurchase = async (cart) => {
 
     try {
         for (let cartProduct of cart.products) {
-            if (cartProduct.quantity <= cartProduct.product.stock) {
-
-                //  I get the product from the catalog
-                const catalogProduct = await productManager.getById(cartProduct.product._id);
+            //  I get the product from the catalog
+            const catalogProduct = await productManager.getById(cartProduct.product._id);
+            if (cartProduct.quantity <= catalogProduct.stock) {
 
                 //  I update the stock for such product
                 await productManager.update(cartProduct.product._id, { stock: catalogProduct.stock - cartProduct.quantity });
