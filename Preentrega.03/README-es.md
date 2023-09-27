@@ -64,6 +64,7 @@ Ejecutar `npm start` es el equivalente a ejecutar `npm run start:prod`
     - `[DELETE] /api/carts/:cid` Elimina todos los productos del carrito con id `:cid`
     - `[PUT] /api/carts/:cid/products/:pid` Ajusta la cantidad de productos con id `:pid` en el carrito con id `:cid`
     - `[PUT] /api/carts/:cid` Elimina todo el contenido anterior del carrito con id `:cid` y lo reemplaza por el contenido de la peticion
+    - `[GET] /api/carts/:cid/purchase` Genera un ticket con los productos que están en el carrito, y cuyo stock en catálogo es suficiente para cubrir los que se agregaron al carrito. Los productos sin suficiente stock, permanecen en el carrito
 - `users`
     - `[GET] /api/sessions/current` si hay un usuario logueado, muestra la información del usuario con sesión abierta
 
