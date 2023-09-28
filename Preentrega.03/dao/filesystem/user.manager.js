@@ -71,7 +71,7 @@ class UserManager {
             ...user,
             _id,
             cart: [],
-            role: (user.email === 'adminCoder@coder.com' && user.password === 'adminCod3r123') ? 'admin' : 'user',
+            role: (user.email === 'adminCoder@coder.com' || user.role == 'admin') ? 'admin' : 'user',
             id: _id
         };
 
