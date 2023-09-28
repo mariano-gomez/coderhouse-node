@@ -2,9 +2,6 @@ const fs = require('fs/promises');
 const path = require('path');
 const dependencyContainer = require('../../dependency.injection');
 
-//  TODO: Not sure why it crashes when i don't add this line, even though i'm not using DB for products in this manager
-const productModel = require('./../models/product.model')
-
 class ProductManager {
 
     #products;
@@ -120,10 +117,14 @@ class ProductManager {
             }
         }
 
+        await this.#saveFile();
+
         await this.#updateWebsocket();
 
-        await this.#saveFile();
-        return oldProduct;
+        return {
+            product: oldProduct,
+            modifiedCount: 1
+        };
     }
 
     async #updateWebsocket() {
