@@ -1,5 +1,6 @@
 const productModel = require('./../models/product.model')
 const dependencyContainer = require('../../dependency.injection');
+const { Types } = require("mongoose");
 
 class ProductManager {
 
@@ -18,11 +19,11 @@ class ProductManager {
         return newProduct;
     }
 
-    getAll() {
-        return productModel.find().lean();
+    async getAll() {
+        return await productModel.find().lean();
     }
 
-    getPaginated(queryObject, pageSize, page, sort) {
+    async getPaginated(queryObject, pageSize, page, sort) {
         queryObject = queryObject || '{}';
         try {
             //  just to check if `queryObject` is a valid JSON
@@ -41,12 +42,11 @@ class ProductManager {
         if (sort) {
             options.sort = { price: sort };
         }
-        return productModel.paginate(queryObject, options);
+        return await productModel.paginate(queryObject, options);
     }
 
     async getById(productId) {
-        const result = await productModel.find({ _id: productId }).lean();
-        return result[0];
+        return await productModel.findOne({_id: new Types.ObjectId(productId)}).lean();
     }
 
     async #getByCode(code) {
@@ -87,7 +87,7 @@ class ProductManager {
 
         const result = await productModel.updateOne(
             { _id: id },
-            { $push: { products: newProductData } }
+            newProductData
         );
 
         //  If the product was successfully updated, then i need to update the websocket data

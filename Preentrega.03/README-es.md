@@ -13,6 +13,12 @@ Los pasos para instalar el proyecto son los siguientes:
 
 Para utilizar el proyecto, hay que lanzar el servidor. Para esto, hay que ejecutar
 ```shell
+node app.js [--env <production|development>] --persist <file|mongo>
+```
+donde `--env` especifica el archivo `.env` que se va a utilizar (`.env.production` o `.env.development`), y `--persist` se refiere al tipo de persistencia que se utilizará para almacenar productos y carritos (`mongo` para mongoDB, `file` para archivos json ubicados en `/data`)
+
+Atajos para ejecutar el server:
+```shell
 npm run start:<env>
 ```
 `<env>` puede ser `prod` (requiere que exista un archivo `.env.production`) o `dev` (requiere que exista un archivo `.env.development`).
@@ -23,10 +29,12 @@ Ejecutar `npm start` es el equivalente a ejecutar `npm run start:prod`
 
 - La estructura del proyecto es la siguiente:
     - `config/` contiene archivos de configuración (estrategias de passport, variables de configuración globales)
+    - `controllers/` El codigo que procesa las peticiones. Su contenido debe(ría) ser llamado desde la capa de routers
     - `dao/` contiene archivos de persistencia, necesarios hasta la implementación de persistencia en base de datos
         - `db/` contiene los managers que interactuan con la DB, a traves de los schemas/modelos definidos para tal fin
-        - `[deprecated] filesystem/` contiene las clases que tienen la responsabilidad de gestionar las persistencias (CRUDs/ABMs) en los archivos ubicados en `/data` (deprecated)
+        - `filesystem/` contiene las clases que tienen la responsabilidad de gestionar las persistencias (CRUDs/ABMs) en los archivos ubicados en `/data`
         - `models/` contiene las especificaciones, para utilizar con mongoose, de los documentos donde se va a persistir la información
+        - `factory.dao.js` en base al tipo de persistencia elegida por consola, devuelve los managers para dicho tipo de persistencia
     - `[deprecated] data/` contiene archivos de persistencia, necesarios hasta la implementación de persistencia en base de datos
     - `middlewares/` código que valida inputs específicos para cada endpoint
         - `auth/` middlewares para validar que el usuario esté autenticado
@@ -34,6 +42,7 @@ Ejecutar `npm start` es el equivalente a ejecutar `npm run start:prod`
     - `public/` archivos css y javascript
     - `routes/` contiene los manejadores para todas las rutas contempladas del proyecto
     - `scripts/` contiene scripts que eventualmente pueden facilitar la tarea de rellenar la DB con información
+    - `services/` contiene clases de servicios que pueden ser requeridos en distintos controllers (envio de mensajes, renderizado de correos, cierre de compras)
     - `utils/` codigo complementario que puede ser requerido en distintas partes del sistema
     - `views/` plantillas handlebars
     - `websockets/` código vinculado al comportamiento del server con websockets
@@ -56,6 +65,7 @@ Ejecutar `npm start` es el equivalente a ejecutar `npm run start:prod`
     - `[DELETE] /api/carts/:cid` Elimina todos los productos del carrito con id `:cid`
     - `[PUT] /api/carts/:cid/products/:pid` Ajusta la cantidad de productos con id `:pid` en el carrito con id `:cid`
     - `[PUT] /api/carts/:cid` Elimina todo el contenido anterior del carrito con id `:cid` y lo reemplaza por el contenido de la peticion
+    - `[PUT] /api/carts/:cid/purchase` Genera un ticket con los productos que están en el carrito, y cuyo stock en catálogo es suficiente para cubrir los que se agregaron al carrito. Los productos sin suficiente stock, permanecen en el carrito. El cuerpo del request puede estar vacío
 - `users`
     - `[GET] /api/sessions/current` si hay un usuario logueado, muestra la información del usuario con sesión abierta
 

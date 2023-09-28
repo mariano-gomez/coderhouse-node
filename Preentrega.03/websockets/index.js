@@ -1,7 +1,18 @@
-const productManager = require('../dao/db/product.manager');
-const chatMessageManager = require('../dao/db/chat.message.manager');
+const factory = require("../dao/factory.dao");
+const productManager = factory.getInstance('product');
+const userManager = factory.getInstance('user');
+const chatMessageManager = factory.getInstance('chat.message');
 
 const socketProductValidator = require('../middlewares/socket.middleware/socket.product.validator.middleware');
+
+async function getUserRole(socket) {
+    const session = socket.request.session;
+    if (session?.passport?.user) {
+        const user = await userManager.getById(session.passport.user);
+        return user?.role;
+    }
+    return null;
+}
 
 async function socketManagerFunction(socket) {
     socket.on('handshake', (arg1, callback) => {
@@ -16,6 +27,12 @@ async function socketManagerFunction(socket) {
 
     //  Product related events
     socket.on('product.create', async (product) => {
+        const userRole = await getUserRole(socket);
+        if (userRole !== 'admin') {  //  only users are allowed to create messages
+            socket.emit('products.create.error', `Solo los administradores pueden crear productos`);
+            return;
+        }
+
         const error = socketProductValidator(product);
         if (!error) {
             await productManager.create(product);
@@ -33,9 +50,15 @@ async function socketManagerFunction(socket) {
     });
 
     socket.on('product.delete.request', async (productId) => {
-        let errorMessage = '';
+        const userRole = await getUserRole(socket);
+        if (userRole !== 'admin') {  //  only users are allowed to create messages
+            socket.emit('products.delete.error', `Solo los administradores pueden borrar productos`);
+            return;
+        }
+
         if (!await productManager.getById(productId)) {
-            socket.emit('products.delete.error', errorMessage);
+            socket.emit('products.delete.error', `El producto no existe`);
+            return;
         }
 
         await productManager.delete(productId);
@@ -44,8 +67,18 @@ async function socketManagerFunction(socket) {
     });
 
     socket.on('chat-message', async (msg) => {
-        await chatMessageManager.create(msg);
-        socket.broadcast.emit('chat-message', msg);
+        const userRole = await getUserRole(socket);
+        if (userRole === 'user') {  //  only users are allowed to create messages
+            await chatMessageManager.create(msg);
+            socket.emit('chat-message', msg);
+            socket.broadcast.emit('chat-message', msg);
+        } else {
+            socket.emit('chat-message.error', {
+                user:`ERROR`,
+                text: `Debe tener rol de 'user' para poder enviar mensajes`,
+                datetime: msg.datetime
+            });
+        }
     });
 
     // socket.on('user', ({ user, action }) => {

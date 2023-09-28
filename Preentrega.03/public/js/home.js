@@ -28,6 +28,17 @@ function fetchPage(link) {
         });
 }
 
+function removeProduct(buttonElement, productId) {
+    axios.delete('/api/products/' + productId)
+        .then(function (response) {
+            buttonElement.closest('.uk-card').parentNode.remove();
+        })
+        .catch(function (error) {
+            alert(error.response.data.error);
+            console.error("Error en la solicitud:", error);
+        });
+}
+
 //  It renders the product list, cleaning the old one, and adding one card for each product in the argument
 function renderProductsList(productsList) {
     productsEl.innerHTML = '';
@@ -47,6 +58,10 @@ function renderProductsList(productsList) {
                                 Agregar al carrito
                             </button>
                         </form>
+                        <br>
+                        <button type="button" onclick="removeProduct(this, '${product.id}')" class="uk-button uk-button-secondary uk-button-small">
+                            Eliminar producto
+                        </button>
                     </div>
                 </div>
             </div>

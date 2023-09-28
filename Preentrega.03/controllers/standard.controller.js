@@ -1,5 +1,7 @@
-const productManager = require("../dao/db/product.manager");
-const cartManager = require("../dao/db/cart.manager");
+const factory = require("../dao/factory.dao");
+const productManager = factory.getInstance('product');
+const cartManager = factory.getInstance('cart');
+const UserDTO = require("../dao/dto/user.dto");
 
 class StandardController {
 
@@ -7,7 +9,7 @@ class StandardController {
         const products = await productManager.getAll();
         res.render('home', {
             products,
-            user: req.user,
+            user: UserDTO.parse(req.user),
             cid: req.user?.cart?._id
         });
     };
@@ -15,7 +17,7 @@ class StandardController {
     static showCartPageById = async (req, res) => {
         const { cid } = req.params;
         res.render('cart', {
-            user: req.user,
+            user: UserDTO.parse(req.user),
             cid: cid
         });
     };
@@ -43,7 +45,7 @@ class StandardController {
 
     static showChatPage = async (req, res) => {
         res.render('chat', {
-            user: req.user,
+            user: UserDTO.parse(req.user),
             cid: req.user?.cart?._id
         });
     };
@@ -65,7 +67,7 @@ class StandardController {
         const products = await productManager.getAll();
         res.render('realTimeProducts', {
             products,
-            user: req.user,
+            user: UserDTO.parse(req.user),
             cid: req.user?.cart?._id
         });
     };

@@ -1,4 +1,6 @@
-const productManager = require("../../dao/db/product.manager");
+const factory = require('../../dao/factory.dao');
+
+const productManager = factory.getInstance('product');
 
 class ProductsApiController {
 

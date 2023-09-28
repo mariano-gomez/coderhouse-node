@@ -4,7 +4,7 @@ const path = require('path');
 
 const program = new Command();
 
-loadDotEnvVariables();
+const _dotenv = loadDotEnvVariables();
 
 const express = require('express');
 const http = require('http');
@@ -15,9 +15,6 @@ const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const MongoStore = require('connect-mongo');
 const passport = require('passport');
-
-//  I could use `process.env.<variableName> directly, but the requirements says i need to create a `confing.js` file, so i did it according to what we did in the course
-const _dotenv = require('./config/config');
 
 const dependencyContainer = require('./dependency.injection');
 const bindPassportStrategies = require('./config/passport.init.config');
@@ -45,8 +42,11 @@ app.use(cookieParser());
 //  This variable is meant to be useful if/when I implement jwt as an option. At that point, it will be included in the .env file, for now, it is hardcoded
 const SESSIONLESS = false;
 
+//  This will eventually be used with socket.io
+let sessionMiddleware;
+
 if (!SESSIONLESS) {
-    app.use(session({
+    sessionMiddleware = session({
         secret: 'app.secret',
         resave: true,
         saveUninitialized: true,
@@ -55,7 +55,9 @@ if (!SESSIONLESS) {
             mongoUrl: _dotenv.MONGO_URL,
             ttl: 60 * 60 //  in secs. After this time, the session gets removed from the DB (if the user interacts in any way, the date gets updated)
         })
-    }));
+    });
+    app.use(sessionMiddleware);
+    io.engine.use(sessionMiddleware);
 }
 
 //  assemble passport strategies to the app
@@ -97,16 +99,26 @@ async function startServer() {
 function loadDotEnvVariables() {
 
     program.option('-e, --env <env>', 'Entorno de ejecucion', 'development');
+    program.requiredOption('--persist <persistence>', 'Tipo de persistencia (`mongo` o `file`)');
     program.parse();
 
-//  i'm taking the `env` attribute from the object retuned by `program.opts()`
-    const { env } = program.opts();
+//  I'm taking the `env` attribute from the object retuned by `program.opts()`
+    const { env, persist } = program.opts();
 
 //  This tells express to load the variables we defined on the `.env` file
     dotenv.config({
         path: path.join(__dirname, env === 'development' ? '.env.development' : '.env.production')
     });
+
+//  I could use `process.env.<variableName> directly, but the requirements says I need to create a `config.js` file, so i did it according to what we did in the course
+    const _dotenv = require('./config/config');
+
+    //  Not the most orthodox way to do it, but I couldn't find a way to set a new attribute on `process.env` using a console option
+    _dotenv.PERSISTENCE = persist;
+
     console.log(`Running on ${env} environment`);
+
+    return _dotenv;
 }
 
 startServer();

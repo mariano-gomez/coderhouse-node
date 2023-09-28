@@ -2,6 +2,7 @@ const express = require('express');
 const checkProductExistsValidatorMiddleware = require('../../middlewares/CheckProductExistsValidator.middleware');
 const cartAddingProductValidatorMiddleware = require('../../middlewares/cartAddingProductValidator.middleware');
 const CartsApiController = require('../../controllers/api/carts.controller');
+const authorizeRole = require("../../middlewares/auth/authorize.role.middleware");
 
 const router = express.Router();
 
@@ -12,22 +13,30 @@ router.post('/', CartsApiController.createNewCart);
 router.get('/:cid', CartsApiController.showCart);
 
 //  /api/carts/:cid/product/:pid    [increments a product quantity/add one unit to the cart if it does not exist]
-router.post('/:cid/product/:pid', cartAddingProductValidatorMiddleware, checkProductExistsValidatorMiddleware, CartsApiController.incrementProductQuantity);
+router.post('/:cid/product/:pid',
+    authorizeRole(['user']),
+    cartAddingProductValidatorMiddleware,
+    checkProductExistsValidatorMiddleware,
+    CartsApiController.incrementProductQuantity
+);
 
 //  api/carts/:cid/products/:pid [removes a specific product from a specific cart]
-router.delete('/:cid/product/:pid', CartsApiController.removeProductFromCart);
+router.delete('/:cid/product/:pid', authorizeRole(['user']), CartsApiController.removeProductFromCart);
 
 //  api/carts/:cid  [it removes all products from the cart]
-router.delete('/:cid', CartsApiController.emptyCart);
+router.delete('/:cid', authorizeRole(['user']), CartsApiController.emptyCart);
 
 //  api/carts/:cid/products/:pid [set the quantity for a specific cart and product]
 router.put(
     '/:cid/product/:pid',
+    authorizeRole(['user']),
     express.raw({ type: '*/*' }),  //   middleware to fetch the raw body from the request
     CartsApiController.changeProductQuantityOnCart
 );
 
 //  It replaces all the products in the given cart, for the ones specified on the request
-router.put('/:cid', CartsApiController.changeCartContent);
+router.put('/:cid', authorizeRole(['user']), CartsApiController.changeCartContent);
+
+router.put('/:cid/purchase', authorizeRole(['user']), CartsApiController.purchase);
 
 module.exports = router;

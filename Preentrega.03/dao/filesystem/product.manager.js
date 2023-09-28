@@ -10,7 +10,7 @@ class ProductManager {
     constructor(filename) {
         this.#itemsFile = path.join(
             __dirname,
-            '../data',
+            '../../data',
             filename
         );
         this.#products = [];
@@ -117,16 +117,53 @@ class ProductManager {
             }
         }
 
+        await this.#saveFile();
+
         await this.#updateWebsocket();
 
-        await this.#saveFile();
-        return oldProduct;
+        return {
+            product: oldProduct,
+            modifiedCount: 1
+        };
     }
 
     async #updateWebsocket() {
         const io = dependencyContainer.get('io');
         io.sockets.emit('products.list.updated', await this.getAll());
     }
+
+    async getPaginated(queryObject, pageSize, page, sort) {
+        await this.#readFile();
+
+        let filteredItems = this.#products;
+        let totalItems;
+        if (queryObject) {
+            //  TODO: filter products according to queryObject elements
+        }
+        totalItems = filteredItems.length;
+
+        if (['-1', 'desc', 'DESC'].indexOf(sort) >= 0) {
+            filteredItems.sort(function compare(itemA, itemB) {
+                return itemB.id - itemA.id;
+            });
+        }
+
+        const docs = filteredItems.slice((page - 1) * pageSize, page * pageSize - 1);
+        const totalPages = Math.ceil(totalItems / pageSize);
+        const prevPage = page > 1 ? (page - 1) : null;
+        const nextPage = page < totalPages ? (page + 1) : null;
+
+        const response = {
+            docs,
+            totalPages,
+            prevPage,
+            nextPage,
+            page,
+            hasPrevPage: prevPage !== null,
+            hasNextPage: nextPage !== null,
+        };
+        return response;
+    }
 }
 
-module.exports = ProductManager;
+module.exports = new ProductManager('products.json');

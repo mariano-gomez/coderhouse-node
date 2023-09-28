@@ -4,9 +4,11 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "start": "nodemon app.js --env production",
-    "start:dev": "nodemon app.js --env development",
-    "start:prod": "nodemon app.js --env production",
+    "start": "node app.js --env production --persist mongo",
+    "start:dev:mongo": "nodemon --ignore '*.json' app.js --env development --persist mongo",
+    "start:dev:file": "nodemon --ignore '*.json' app.js --env development --persist file",
+    "start:prod:mongo": "node app.js --env production --persist mongo",
+    "start:prod:file": "node app.js --env production --persist file",
     "seed:products": "node ./scripts/seeder.products.js"
   },
   "keywords": [],
@@ -27,6 +29,7 @@
     "i": "^0.3.7",
     "mongoose": "^7.4.1",
     "mongoose-paginate-v2": "^1.7.31",
+    "nodemailer": "^6.9.5",
     "npm": "^9.8.1",
     "passport": "^0.6.0",
     "passport-github2": "^0.1.12",

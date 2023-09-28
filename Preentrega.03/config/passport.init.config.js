@@ -1,12 +1,13 @@
 const passport = require('passport');
 
+//  managers
+const factory = require("../dao/factory.dao");
+const cartManager = factory.getInstance('cart');
+const userManager = factory.getInstance('user');
+
 //  passport strategies
 const { GitHubStrategy, gitHubStrategyCallback, gitHubAppCredentials } = require('./passport.github.config');
 const { LocalStrategy, signupStrategyCallback, loginStrategyCallback } = require('./passport.local.config');
-
-//  managers
-const userManager = require('../dao/db/user.manager');
-const cartManager = require("../dao/db/cart.manager");
 
 //  This variable is meant to be useful if/when I implement jwt as an option. At that point, it will be included in the .env file, for now, it is hardcoded
 const SESSIONLESS = false;
@@ -23,20 +24,28 @@ const bindPassportStrategies = () => {
             done(null, user._id);
         })
         passport.deserializeUser(async (id, done) => {
-            const user = await userManager.getById(id);
+            if (id) {
+                try {
+                    const user = await userManager.getById(id);
 
-            //  (i think) higly unefficient, search if there isn't a better approach/workaround
-            const cart = await cartManager.getByUser(user._id);
+                    const { cart: _cart, ...userData } = user;
 
-            const role = (user.email === 'adminCoder@coder.com' && user.password === 'adminCod3r123') ? 'admin' : 'usuario';
-            delete user.password;
+                    //  (i think) higly unefficient, search if there isn't a better approach/workaround
+                    const cart = await cartManager.getByUser(user._id);
 
-            done(null, {
-                role,
-                cart,
-                name: user.first_name,
-                ...user
-            });
+                    delete user.password;
+
+                    done(null, {
+                        cart,
+                        name: user.first_name,
+                        ...userData
+                    });
+                } catch (e) {
+                    console.log(e.message);
+                }
+            } else {
+                done (null, false);
+            }
         });
     }
 };

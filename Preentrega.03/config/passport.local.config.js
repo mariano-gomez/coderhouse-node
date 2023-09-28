@@ -1,8 +1,9 @@
 const local = require('passport-local');
 
-const userManager = require('../dao/db/user.manager');
 const { hashPassword, isValidPassword } = require('../utils/password.encrypter.utils');
-const cartManager = require("../dao/db/cart.manager");
+const factory = require("../dao/factory.dao");
+const cartManager = factory.getInstance('cart');
+const userManager = factory.getInstance('user');
 
 const LocalStrategy = local.Strategy;
 
@@ -28,7 +29,7 @@ const signupStrategyCallback = async (req, email, password, done) => {
         });
 
     } catch(e) {
-        console.log('passport local strategy (signup): something went wrong');
+        console.log('passport local strategy (signup): something went wrong [A]');
         done(e, false);
     }
 
@@ -36,7 +37,7 @@ const signupStrategyCallback = async (req, email, password, done) => {
         //  The user is going to need a cart
         cart = await cartManager.create(newUser._id);
     } catch(e) {
-        console.log('passport local strategy (signup): something went wrong');
+        console.log('passport local strategy (signup): something went wrong [B]');
         //  if there is a problem creating the cart, the user should be removed
         await userManager.delete(newUser._id);
         done(e, false);
@@ -48,18 +49,15 @@ const signupStrategyCallback = async (req, email, password, done) => {
             ...newUser
         });
 
-        return done(null, {
-            name: newUser.first_name,
-            id: newUser._id,
-            cart,
-            ...newUser._doc
-        });
+        const storedUser = await userManager.getById(newUser._id);
+
+        return done(null, storedUser);
 
     } catch(e) {
         //  if there is a problem linking the user and the cart, we need to remove both from the DB
         await userManager.delete(newUser._id);
         await cartManager.delete(cart._id);
-        console.log('passport local strategy (signup): something went wrong');
+        console.log('passport local strategy (signup): something went wrong [C]');
         done(e, false);
     }
 }
@@ -85,7 +83,7 @@ const loginStrategyCallback = async (email, password, done) => {
         done(null, _user);
 
     } catch(e) {
-        console.log('passport local strategy (login): something went wrong');
+        console.log('passport local strategy (login): something went wrong [D]');
         done(e, false);
     }
 }

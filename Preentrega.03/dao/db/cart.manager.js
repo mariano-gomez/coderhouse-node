@@ -1,11 +1,10 @@
 const cartModel = require('./../models/cart.model')
 const { Types } = require("mongoose");
-const userModel = require("../models/user.model");
 
 class CartManager {
 
-    getById(cartId) {
-        return cartModel.findOne({_id: new Types.ObjectId(cartId)}).lean();
+    async getById(cartId) {
+        return await cartModel.findOne({_id: new Types.ObjectId(cartId)}).lean();
     }
 
     async create(userId) {
