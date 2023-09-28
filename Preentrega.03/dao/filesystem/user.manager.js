@@ -104,19 +104,11 @@ class UserManager {
             return;
         }
 
-        oldUser._doc = {
-            id: oldUser.id,
-            _id: oldUser._id,
-        };
-
         const userProperties = Object.getOwnPropertyNames(oldUser);
 
         for (const field of userProperties) {
             if (newUser[field] !== undefined) {
                 oldUser[field] = newUser[field];
-
-                //  because I made almost all the code considering mongo responses, i need to adjust the responses in this manager according to what was expected from mongo responses
-                oldUser._doc[field] = oldUser[field];
             }
         }
 

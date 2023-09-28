@@ -7,6 +7,9 @@ class FactoryDao {
         switch (model) {
             case 'chat.message':
             case 'ticket':
+            case 'user':
+            case 'cart':
+            case 'product':
                 persistanceFile = ((_dotenv.PERSISTENCE != 'mongo') ? './filesystem/' :  './db/') + model + '.manager';
                 break;
             default:

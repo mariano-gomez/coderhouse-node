@@ -65,9 +65,7 @@ const gitHubStrategyCallback = async (accessToken, refreshToken, profile, done) 
 
             return done(null, {
                 name: newUser.first_name,
-                id: newUser._id,
-                cart,
-                ...newUser._doc
+                ...newUser
             });
 
         } catch(e) {

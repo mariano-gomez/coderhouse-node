@@ -1,5 +1,7 @@
 const fs = require('fs/promises');
 const path = require('path');
+const factoryDAO = require('../factory.dao');
+const productManager = require('./product.manager');
 
 class CartManager {
 
@@ -50,6 +52,7 @@ class CartManager {
 
         const newCart = {
             id,
+            _id: id,
             user: userId,
             products: []    //  this array will contain objects with the form { productId, quantity }
         };
@@ -69,11 +72,13 @@ class CartManager {
             return null;
         }
 
-        const existingProduct = cart.products.find(p => p.productId == productId);
+        const existingProduct = cart.products.find(p => p.product._id == productId);
 
         if (existingProduct === undefined) {
+            const product = await productManager.getById(productId);
+            product._id = product.id;
             cart.products.push({
-                productId,
+                product,
                 quantity: 1
             });
         } else {
@@ -107,10 +112,12 @@ class CartManager {
 
         const productsInCart = cart.products.length;
 
-        cart.products = cart.products.filter(prod => prod.id != productId);
+        cart.products = cart.products.filter(prod => prod.product._id != productId);
 
         //  if the product was present, the lengths will be different by 1. Otherwise, it will return 0
         result.modifiedCount = productsInCart - cart.products.length;
+
+        this.#saveFile();
         return result;
     }
 
@@ -137,7 +144,7 @@ class CartManager {
         const cart = await this.getById(cartId);
 
         const product = cart.products.find((product) => {
-            return product.id == productId;
+            return product.product.id == productId;
         });
 
         if (!product) {
