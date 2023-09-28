@@ -67,6 +67,11 @@ if (cookies.user) {
     appendMessageElement(user, datetime, text);
   });
 
+  socket.on('chat-message.error', ({ user, datetime, text }) => {
+    // renderizar el mensaje
+    appendMessageElement(user, datetime, text);
+  });
+
   socket.on('user', ({ user, action }) => {
     appendUserActionElement(user, action);
   });
@@ -90,7 +95,6 @@ if (cookies.user) {
 
     socket.emit('chat-message', msg);
     target.value = "";
-    appendMessageElement(username, date.toLocaleTimeString('en-US'), value);
   });
 }
 

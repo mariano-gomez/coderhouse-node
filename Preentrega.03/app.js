@@ -42,8 +42,11 @@ app.use(cookieParser());
 //  This variable is meant to be useful if/when I implement jwt as an option. At that point, it will be included in the .env file, for now, it is hardcoded
 const SESSIONLESS = false;
 
+//  This will eventually be used with socket.io
+let sessionMiddleware;
+
 if (!SESSIONLESS) {
-    app.use(session({
+    sessionMiddleware = session({
         secret: 'app.secret',
         resave: true,
         saveUninitialized: true,
@@ -52,7 +55,9 @@ if (!SESSIONLESS) {
             mongoUrl: _dotenv.MONGO_URL,
             ttl: 60 * 60 //  in secs. After this time, the session gets removed from the DB (if the user interacts in any way, the date gets updated)
         })
-    }));
+    });
+    app.use(sessionMiddleware);
+    io.engine.use(sessionMiddleware);
 }
 
 //  assemble passport strategies to the app

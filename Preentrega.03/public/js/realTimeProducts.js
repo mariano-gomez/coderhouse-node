@@ -25,13 +25,11 @@ const socketBehavior = {
         });
 
         socket.on('products.delete.error', (error) => {
-            //  TODO: think how to inform this
-            // renderProductDeleteError(error);
+            alert(error);
         });
 
         socket.on('products.create.error', (error) => {
-            //  TODO: think how to inform this
-            // renderProductCreateError(error);
+            alert(error);
         });
     },
 
