@@ -5,9 +5,8 @@
   "main": "app.js",
   "scripts": {
     "start": "node app.js --env production --persist mongo",
-    "start:nodemon:dev:mongo": "nodemon app.js --env development --persist mongo",
-    "start:dev:mongo": "node app.js --env development --persist mongo",
-    "start:dev:file": "node app.js --env development --persist file",
+    "start:dev:mongo": "nodemon --ignore '*.json' app.js --env development --persist mongo",
+    "start:dev:file": "nodemon --ignore '*.json' app.js --env development --persist file",
     "start:prod:mongo": "node app.js --env production --persist mongo",
     "start:prod:file": "node app.js --env production --persist file",
     "seed:products": "node ./scripts/seeder.products.js"
