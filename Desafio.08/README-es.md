@@ -49,8 +49,8 @@ Ejecutar `npm start` es el equivalente a ejecutar `npm run start:prod`
     - `app.js` el archivo principal del proyecto
     - `dependency.injection.js` la idea de este archivo es centralizar las referencias a distintos recursos o servicios, para poder accederlos de forma facil desde cualquier lugar del sistema
     - `.env.production | .env.development` archivo con las variables de entorno requeridas para que el servidor funcione (leer más en la sección "Uso")
-## Endpoints
 
+## Endpoints
 - `products`
     - `[GET] /api/products` Obtiene el listado de todos los productos en el sistema. Opcionalmente se puede agregar un parámetro `?limit=N` para ver los primeros `N` productos almacenados en el sistema
     - `[GET] /api/products/:pid` Si existe, muestra la información del producto especificado
@@ -81,3 +81,4 @@ Ejecutar `npm start` es el equivalente a ejecutar `npm run start:prod`
 - `[GET] /profile` Página para ver la información en el sistema del usuario logueado actualmente (redirecciona si no hay usuario logueado)
 - `[GET] /logout` Enlace para cerrar sesión. Debe redireccionar a `/login`
 - `[GET] /cart/:id` Página para ver los productos cargados en el carrito del usuario logueado actualmente (redirecciona si no hay usuario logueado)
+- `[GET] /mockingproducts` Devuelve un listado de productos generados aleatoriamente con la libreria faker (100 por defecto, se puede alterar este numero agregando un argumento `quantity=<numero>` al queryString)

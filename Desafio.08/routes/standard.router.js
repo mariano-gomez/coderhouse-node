@@ -1,10 +1,13 @@
 const Router = require('express');
 const isAuth = require('../middlewares/auth/is.auth.middleware');
 const StandardController = require('../controllers/standard.controller');
+const mockerRoutes = require('./mocker.router');
 
 const { createProductValidatorMiddleware } = require('../middlewares/ProductValidator.middleware');
 
 const router = Router();
+
+router.use(mockerRoutes);
 
 router.get('/', isAuth, StandardController.showMainPage);
 
