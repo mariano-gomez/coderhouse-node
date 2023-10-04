@@ -1,4 +1,5 @@
 const factory = require('../../dao/factory.dao');
+const CustomError = require('../../utils/custom.error.utils');
 
 const productManager = factory.getInstance('product');
 
@@ -54,14 +55,14 @@ class ProductsApiController {
         }
     };
 
-    static createProduct = async (req, res) => {
+    static createProduct = async (req, res, next) => {
         const { body } = req;
 
         try {
             const newProduct = await productManager.create(body);
             res.status(201).send(newProduct);
         } catch (e) {
-            res.status(400).send({ "error": e.message });
+            return next(e);
         }
     };
 
@@ -79,10 +80,7 @@ class ProductsApiController {
             res.sendStatus(404);
 
         } catch (e) {
-            res.status(500).send({
-                message: e.message,
-                exception: e.stack
-            });
+            return next(e);
         }
     };
 

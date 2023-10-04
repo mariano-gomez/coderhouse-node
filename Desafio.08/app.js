@@ -18,6 +18,7 @@ const passport = require('passport');
 
 const dependencyContainer = require('./dependency.injection');
 const bindPassportStrategies = require('./config/passport.init.config');
+const customErrorHandlerMiddleware = require('./middlewares/custom.error.handler.middleware');
 
 const app = express();
 const server = http.createServer(app);
@@ -83,6 +84,8 @@ async function startServer() {
 //  To send an error response for any URL not supported
     app.use('/', authRoutes);
     app.use('/', standardRoutes);
+
+    app.use(customErrorHandlerMiddleware);
 
     //  enabling websockets activity
     io.on(

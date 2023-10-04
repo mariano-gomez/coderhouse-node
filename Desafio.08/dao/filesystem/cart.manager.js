@@ -1,7 +1,8 @@
 const fs = require('fs/promises');
 const path = require('path');
-const factoryDAO = require('../factory.dao');
-const productManager = require('./product.manager');
+const factoryDAO = require('../../dao/factory.dao');
+const productManager = factoryDAO.getInstance('product');
+const CustomError = require('../../utils/custom.error.utils');
 
 class CartManager {
 
@@ -148,7 +149,7 @@ class CartManager {
         });
 
         if (!product) {
-            throw new Error('the product is not present in the cart');
+            throw new CustomError('the product is not present in the cart', CustomError.ERROR_TYPES.DATABASE_ERROR, 500);
         }
         product.quantity = quantity;
 
@@ -160,7 +161,7 @@ class CartManager {
 
         const cart = await this.getById(cartId);
         if (!cart) {
-            throw new Error(`the specified cart does not exist`)
+            throw new CustomError('the specified cart does not exist', CustomError.ERROR_TYPES.DATABASE_ERROR, 500);
         }
 
         cart.products = [];

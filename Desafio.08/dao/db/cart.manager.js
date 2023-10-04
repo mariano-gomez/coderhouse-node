@@ -1,4 +1,5 @@
-const cartModel = require('./../models/cart.model')
+const cartModel = require('./../models/cart.model');
+const CustomError = require('../../utils/custom.error.utils');
 const { Types } = require("mongoose");
 
 class CartManager {
@@ -70,7 +71,7 @@ class CartManager {
         });
 
         if (!product) {
-            throw new Error('the product is not present in the cart');
+            throw new CustomError('the product is not present in the cart', CustomError.ERROR_TYPES.DATABASE_ERROR, 500);
         }
         product.quantity = quantity;
 
@@ -81,7 +82,7 @@ class CartManager {
     async updateCartWithProducts(cartId, products) {
         const cart = await cartModel.findOne({ _id: cartId });
         if (!cart) {
-            throw new Error(`the specified cart does not exist`)
+            throw new CustomError('the specified cart does not exist', CustomError.ERROR_TYPES.DATABASE_ERROR, 500);
         }
 
         cart.products = [];

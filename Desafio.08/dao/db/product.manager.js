@@ -1,4 +1,5 @@
 const productModel = require('./../models/product.model')
+const CustomError = require('../../utils/custom.error.utils');
 const dependencyContainer = require('../../dependency.injection');
 const { Types } = require("mongoose");
 
@@ -8,7 +9,7 @@ class ProductManager {
         if (product.code) {
             const existingProduct = await this.#getByCode(product.code);
             if (existingProduct) {
-                throw new Error('The product code already exists');
+                throw new CustomError('The product code already exists', CustomError.ERROR_TYPES.DATABASE_ERROR, 400);
             }
         }
 
@@ -29,8 +30,7 @@ class ProductManager {
             //  just to check if `queryObject` is a valid JSON
             queryObject = JSON.parse(queryObject);
         } catch (e) {
-            throw new Error('query is malformed. Please send a syntactically correct JSON');
-            return;
+            throw new CustomError('query is malformed. Please send a syntactically correct JSON', CustomError.ERROR_TYPES.INPUT_ERROR, 400);
         }
 
         let options = {
@@ -81,7 +81,7 @@ class ProductManager {
             //  If a product already exists with that code, and the product id that holds it is different than the id
             //  the user sent, (meaning, is not the same product), then it should throw an error
             if (existingProduct && existingProduct.id != id) {
-                throw new Error('The product code is already taken');
+                throw new CustomError('The product code is already taken', CustomError.ERROR_TYPES.INPUT_ERROR, 400);
             }
         }
 

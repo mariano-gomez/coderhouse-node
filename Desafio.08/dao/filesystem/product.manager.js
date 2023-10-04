@@ -1,5 +1,6 @@
 const fs = require('fs/promises');
 const path = require('path');
+const CustomError = require('../../utils/custom.error.utils');
 const dependencyContainer = require('../../dependency.injection');
 
 class ProductManager {
@@ -39,7 +40,7 @@ class ProductManager {
         const existingProduct = await this.#getByCode(product.code);
 
         if (existingProduct) {
-            throw new Error('The product code already exists');
+            throw new CustomError('The product code already exists', CustomError.ERROR_TYPES.DATABASE_ERROR, 400);
         }
 
         const id = (this.#products[this.#products.length - 1]?.id || 0) + 1;
@@ -99,7 +100,7 @@ class ProductManager {
             //  If a product already exists with that code, and the product id that holds it is different than the id
             //  the user sent, (meaning, is not the same product), then it should throw an error
             if (existingProduct && existingProduct.id != id) {
-                throw new Error('The product code already exists');
+                throw new CustomError('The product code is already taken', CustomError.ERROR_TYPES.INPUT_ERROR, 400);
             }
         }
 
