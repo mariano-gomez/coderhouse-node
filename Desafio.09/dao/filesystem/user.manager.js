@@ -1,6 +1,9 @@
 const fs = require('fs/promises');
 const path = require('path');
 
+const dependencyContainer = require("../../dependency.injection");
+const logger = dependencyContainer.get('logger');
+
 class UserManager {
 
     #users;
@@ -92,7 +95,7 @@ class UserManager {
         if (newUser.email) {
             const existingEmail = await this.getByEmail(newUser.email);
             if (existingEmail && existingEmail._id != id) {
-                console.log('email already taken');
+                logger.warning('email already taken');
                 return;
             }
         }
@@ -100,7 +103,7 @@ class UserManager {
         const oldUser = await this.getById(id);
 
         if (!oldUser) {
-            console.log('User not found:', id);
+            logger.error('User not found:', id);
             return;
         }
 

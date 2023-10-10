@@ -4,7 +4,9 @@ const path = require('path');
 
 const program = new Command();
 
+const dependencyContainer = require('./dependency.injection');
 const _dotenv = loadDotEnvVariables();
+dependencyContainer.set('dotenv', _dotenv);
 
 const express = require('express');
 const http = require('http');
@@ -16,14 +18,16 @@ const session = require('express-session');
 const MongoStore = require('connect-mongo');
 const passport = require('passport');
 
-const dependencyContainer = require('./dependency.injection');
+const logger = require('./services/logger.service');
+dependencyContainer.set('logger', logger);
+const loggerMiddleware = require('./middlewares/custom.logger.middleware');
+
 const bindPassportStrategies = require('./config/passport.init.config');
 const customErrorHandlerMiddleware = require('./middlewares/custom.error.handler.middleware');
 
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server);
-dependencyContainer.set('app', app);
 
 //  setting the `handlebars` template engine
 app.engine('handlebars', handlebars.engine());
@@ -32,9 +36,9 @@ app.set('view engine', 'handlebars');
 
 //  eventually, i'll need to emit events from different places, so i need a unique place where i can fetch socket.io
 dependencyContainer.set('io', io);
-dependencyContainer.set('mongoConnectionString', _dotenv.MONGO_URL);
 
 //  Some global configs
+app.use(loggerMiddleware);
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use('/static', express.static(path.join(__dirname + '/public')));
@@ -113,11 +117,10 @@ function loadDotEnvVariables() {
         path: path.join(__dirname, env === 'development' ? '.env.development' : '.env.production')
     });
 
+    dotenv.populate(process.env, { ENVIRONMENT: env })
+
 //  I could use `process.env.<variableName> directly, but the requirements says I need to create a `config.js` file, so i did it according to what we did in the course
     const _dotenv = require('./config/config');
-
-    //  Not the most orthodox way to do it, but I couldn't find a way to set a new attribute on `process.env` using a console option
-    _dotenv.PERSISTENCE = persist;
 
     console.log(`Running on ${env} environment`);
 

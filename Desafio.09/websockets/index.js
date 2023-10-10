@@ -3,6 +3,9 @@ const productManager = factory.getInstance('product');
 const userManager = factory.getInstance('user');
 const chatMessageManager = factory.getInstance('chat.message');
 
+const dependencyContainer = require("../dependency.injection");
+const logger = dependencyContainer.get('logger');
+
 const socketProductValidator = require('../middlewares/socket.middleware/socket.product.validator.middleware');
 
 async function getUserRole(socket) {
@@ -16,14 +19,14 @@ async function getUserRole(socket) {
 
 async function socketManagerFunction(socket) {
     socket.on('handshake', (arg1, callback) => {
-        console.log('cliente conectado.', 'socket id: ', socket.id);
+        logger.info('cliente conectado.', 'socket id: ', socket.id);
         callback({
             status: "ok"
         });
     });
 
     //  chat related events
-    console.log(`user has connected: ${socket.id}`);
+    logger.info(`user has connected: ${socket.id}`);
 
     //  Product related events
     socket.on('product.create', async (product) => {

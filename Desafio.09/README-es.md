@@ -82,3 +82,4 @@ Ejecutar `npm start` es el equivalente a ejecutar `npm run start:prod`
 - `[GET] /logout` Enlace para cerrar sesión. Debe redireccionar a `/login`
 - `[GET] /cart/:id` Página para ver los productos cargados en el carrito del usuario logueado actualmente (redirecciona si no hay usuario logueado)
 - `[GET] /mockingproducts` Devuelve un listado de productos generados aleatoriamente con la libreria faker (100 por defecto, se puede alterar este numero agregando un argumento `quantity=<numero>` al queryString)
+- `[GET] /loggerTest` Genera una línea de log por cada tipo de nivel configurado en el sistema
