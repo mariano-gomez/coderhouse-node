@@ -9,6 +9,9 @@ const userManager = factory.getInstance('user');
 const { GitHubStrategy, gitHubStrategyCallback, gitHubAppCredentials } = require('./passport.github.config');
 const { LocalStrategy, signupStrategyCallback, loginStrategyCallback } = require('./passport.local.config');
 
+const dependencyContainer = require("../dependency.injection");
+const logger = dependencyContainer.get('logger');
+
 //  This variable is meant to be useful if/when I implement jwt as an option. At that point, it will be included in the .env file, for now, it is hardcoded
 const SESSIONLESS = false;
 
@@ -41,7 +44,7 @@ const bindPassportStrategies = () => {
                         ...userData
                     });
                 } catch (e) {
-                    console.log(e.message);
+                    logger.error(e.message);
                 }
             } else {
                 done (null, false);

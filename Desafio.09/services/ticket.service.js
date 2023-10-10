@@ -4,6 +4,9 @@ const productManager = factoryDAO.getInstance('product');
 const userManager = factoryDAO.getInstance('user');
 const ticketManager = factoryDAO.getInstance('ticket');
 
+const dependencyContainer = require("../dependency.injection");
+const logger = dependencyContainer.get('logger');
+
 const finishPurchase = async (cart) => {
     const user = await userManager.getById(cart.user._id);
 
@@ -52,8 +55,8 @@ const finishPurchase = async (cart) => {
         }
         return response;
     } catch (e) {
-        console.log(e.message);
-        console.log('partial creation of ticket, for cart ', cart._id.toString());
+        logger.error(e.message);
+        logger.error('partial creation of ticket, for cart ', cart._id.toString());
         return null;
     }
 }

@@ -33,6 +33,8 @@ router.get('/realtimeproducts', isAuth, StandardController.showRealtimeProductsP
 
 router.get('/products/delete/:pid', StandardController.deleteProductFromPage);
 
+router.get('/loggerTest', StandardController.loggerTest);
+
 //  This method is meant to provide a response for any other endpoint/url that doesn't exists
 router.all('*', StandardController.defaultResponse);
 

@@ -1,10 +1,12 @@
 const GitHubStrategy = require('passport-github2');
+const dependencyContainer = require('../dependency.injection');
 const factory = require("../dao/factory.dao");
 const userManager = factory.getInstance('user');
 const cartManager = factory.getInstance('cart');
 
 //  I could use `process.env.<variableName> directly, but the requirements says i need to create a `confing.js` file, so i did it according to what we did in the course
-const _dotenv = require('./config');
+const _dotenv = dependencyContainer.get('dotenv');
+const logger = dependencyContainer.get('logger');
 
 const gitHubAppCredentials = {
     clientID:       _dotenv.GITHUB_CLIENT_ID,
@@ -30,7 +32,7 @@ const gitHubStrategyCallback = async (accessToken, refreshToken, profile, done) 
 
     if (!user) {
         try {
-            console.log('new user!');
+            logger.info('new user!');
 
             const newUserData = {
                 first_name: userData.name.split(" ")[0],
@@ -50,7 +52,7 @@ const gitHubStrategyCallback = async (accessToken, refreshToken, profile, done) 
         try {
             cart = await cartManager.create(newUser._id);
         } catch(e) {
-            console.log('passport github strategy: something went wrong');
+            logger.error('passport github strategy: something went wrong');
             //  if there is a problem creating the cart, the user should be removed
             await userManager.delete(newUser._id);
             return done(e.message, false);
@@ -72,7 +74,7 @@ const gitHubStrategyCallback = async (accessToken, refreshToken, profile, done) 
             //  if there is a problem linking the user and the cart, we need to remove both from the DB
             await userManager.delete(newUser._id);
             await cartManager.delete(cart._id);
-            console.log('passport github strategy: something went wrong');
+            logger.error('passport github strategy: something went wrong');
             return done(e.message, false);
         }
 

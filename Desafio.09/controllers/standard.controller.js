@@ -37,7 +37,8 @@ class StandardController {
         try {
             const result = await cartManager.deleteProduct(cid, pid);
         } catch (e) {
-            console.log(e.message);
+            console.log('saracatunga')
+            req.logger.warning(e.message);
         }
 
         res.redirect(`/cart/${cid}`);
@@ -87,10 +88,19 @@ class StandardController {
     //  for requests that matches with no route
     static defaultResponse = (req, res) => {
         res.statusCode = 404;
-        console.log(`An invalid url has been required`);
+        req.logger.error(`An invalid url has been required`);
         res.send({ "Error": "The required URL doesn't exists" });
     }
 
+    static loggerTest = (req, res) => {
+        for (let _level in req.logger.levels) {
+            req.logger[_level]({
+                message: 'MENSAJE DEL TIPO ' + _level,
+                timestamp: Date.now()
+            });
+        }
+        res.send('Check your logs');
+    }
 }
 
 module.exports = StandardController;
