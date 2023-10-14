@@ -118,6 +118,7 @@ function loadDotEnvVariables() {
     });
 
     dotenv.populate(process.env, { ENVIRONMENT: env })
+    dotenv.populate(process.env, { PERSISTENCE: persist })
 
 //  I could use `process.env.<variableName> directly, but the requirements says I need to create a `config.js` file, so i did it according to what we did in the course
     const _dotenv = require('./config/config');

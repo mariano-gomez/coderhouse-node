@@ -9,4 +9,5 @@ module.exports = {
         GMAIL_PASSWORD: process.env.GMAIL_PASSWORD,
     },
     ENV: process.env.ENVIRONMENT,
+    PERSISTENCE: process.env.PERSISTENCE,
 };
