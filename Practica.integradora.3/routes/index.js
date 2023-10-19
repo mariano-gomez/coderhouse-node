@@ -15,7 +15,7 @@ const SESSIONLESS = false;
 
 if (!SESSIONLESS) {
     //  enables routes that depends on sessions
-    router.use('/sessions', apiAuthWithSessionsRoutes);
+    router.use('/users', apiAuthWithSessionsRoutes);
 }
 
 module.exports = {

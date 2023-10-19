@@ -67,7 +67,8 @@ Ejecutar `npm start` es el equivalente a ejecutar `npm run start:prod`
     - `[PUT] /api/carts/:cid` Elimina todo el contenido anterior del carrito con id `:cid` y lo reemplaza por el contenido de la peticion
     - `[PUT] /api/carts/:cid/purchase` Genera un ticket con los productos que están en el carrito, y cuyo stock en catálogo es suficiente para cubrir los que se agregaron al carrito. Los productos sin suficiente stock, permanecen en el carrito. El cuerpo del request puede estar vacío
 - `users`
-    - `[GET] /api/sessions/current` si hay un usuario logueado, muestra la información del usuario con sesión abierta
+    - `[GET] /api/users/current` si hay un usuario logueado, muestra la información del usuario con sesión abierta
+    - `[PUT] /api/users/premium/:uid` si el usuario `:uid` no tiene rol de `admin`, intercambia el rol del usuario entre `user` y `premium`, dependiendo el rol que tiene al invocar este endpoint
 
 ## Urls
 - `[GET] /` Página "home", que muestra el listado de productos existentes hasta el momento
