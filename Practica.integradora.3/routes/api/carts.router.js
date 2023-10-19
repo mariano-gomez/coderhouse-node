@@ -2,6 +2,7 @@ const express = require('express');
 const checkProductExistsValidatorMiddleware = require('../../middlewares/CheckProductExistsValidator.middleware');
 const cartAddingProductValidatorMiddleware = require('../../middlewares/cartAddingProductValidator.middleware');
 const ownProductCantBeAddedToCart = require('../../middlewares/auth/own.product.cant.be.added.to.cart.middleware');
+const ownProductsCantBeAddedToCart = require('../../middlewares/auth/own.products.cant.be.added.to.cart.middleware');
 const CartsApiController = require('../../controllers/api/carts.controller');
 const authorizeRole = require("../../middlewares/auth/authorize.role.middleware");
 
@@ -40,7 +41,7 @@ router.put(
 //  It replaces all the products in the given cart, for the ones specified on the request
 router.put('/:cid',
     authorizeRole(['user', 'premium']),
-    //  TODO: create a middleware that checks for the owner of each product in the request (must check the body)
+    ownProductsCantBeAddedToCart,
     CartsApiController.changeCartContent
 );
 
