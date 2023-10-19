@@ -9,6 +9,7 @@ const schema = new Schema({
     status: { type: Boolean, default: true },
     stock: { type: Number, default: 0 },
     category: String,
+    owner: { type: String, default: 'admin' },  //  it should contain the creator's email. It should never change
     thumbnails: { type: [String], default: [] },
     createdDate: { type: Number, default: Date.now() }
 });
