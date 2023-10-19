@@ -8,13 +8,18 @@ const logger = dependencyContainer.get('logger');
 
 const socketProductValidator = require('../middlewares/socket.middleware/socket.product.validator.middleware');
 
-async function getUserRole(socket) {
+async function getUser(socket) {
     const session = socket.request.session;
     if (session?.passport?.user) {
         const user = await userManager.getById(session.passport.user);
-        return user?.role;
+        return user;
     }
     return null;
+}
+
+async function getUserRole(socket) {
+    const user = await getUser(socket);
+    return (user?.role) ? user.role : null;
 }
 
 async function socketManagerFunction(socket) {
@@ -30,12 +35,13 @@ async function socketManagerFunction(socket) {
 
     //  Product related events
     socket.on('product.create', async (product) => {
-        const userRole = await getUserRole(socket);
-        if (userRole !== 'admin') {  //  only users are allowed to create messages
+        const user = await getUser(socket);
+        if (user?.role !== 'admin') {  //  only users are allowed to create messages
             socket.emit('products.create.error', `Solo los administradores pueden crear productos`);
             return;
         }
 
+        product.owner = user?.email || 'admin';
         const error = socketProductValidator(product);
         if (!error) {
             await productManager.create(product);
