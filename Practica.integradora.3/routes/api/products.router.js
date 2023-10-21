@@ -12,12 +12,23 @@ router.get('/:pid', CartsApiController.getProduct);
 router.get('/', CartsApiController.getProducts);
 
 //  /api/products
-router.post('/', authorizeRole(['admin']), createProductValidatorMiddleware, CartsApiController.createProduct);
+router.post('/',
+    authorizeRole(['admin', 'premium']),
+    createProductValidatorMiddleware,
+    CartsApiController.createProduct
+);
 
 //  /api/products/:pid
-router.put('/:pid', authorizeRole(['admin']), updateProductValidatorMiddleware, CartsApiController.updateProduct);
+router.put('/:pid',
+    authorizeRole(['admin', 'premium']),
+    updateProductValidatorMiddleware,
+    CartsApiController.updateProduct
+);
 
 //  /api/products/:pid
-router.delete('/:pid', authorizeRole(['admin']), CartsApiController.deleteProduct);
+router.delete('/:pid',
+    authorizeRole(['admin', 'premium']),
+    CartsApiController.deleteProduct
+);
 
 module.exports = router;

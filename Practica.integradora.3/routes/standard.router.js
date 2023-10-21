@@ -37,11 +37,18 @@ router.post('/products',
             req.body.status = (req.body.status === "true");
         }
         next();
-    }, createProductValidatorMiddleware, StandardController.createProduct);
+    },
+    authorizeRole(['admin', 'premium']),
+    createProductValidatorMiddleware,
+    StandardController.createProduct
+);
 
 router.get('/realtimeproducts', isAuth, StandardController.showRealtimeProductsPage);
 
-router.get('/products/delete/:pid', StandardController.deleteProductFromPage);
+router.get('/products/delete/:pid',
+    authorizeRole(['admin', 'premium']),
+    StandardController.deleteProductFromPage
+);
 
 router.get('/loggerTest', StandardController.loggerTest);
 
