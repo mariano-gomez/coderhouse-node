@@ -1,6 +1,7 @@
 const Router = require('express');
 const isAuth = require('../middlewares/auth/is.auth.middleware');
 const authorizeRole = require('../middlewares/auth/authorize.role.middleware');
+const isProductOwnerOrAdmin = require('../middlewares/auth/is.product.owner.or.admin.middleware');
 const ownProductCantBeAddedToCart = require('../middlewares/auth/own.product.cant.be.added.to.cart.middleware');
 const StandardController = require('../controllers/standard.controller');
 const mockerRoutes = require('./mocker.router');
@@ -47,6 +48,7 @@ router.get('/realtimeproducts', isAuth, StandardController.showRealtimeProductsP
 
 router.get('/products/delete/:pid',
     authorizeRole(['admin', 'premium']),
+    isProductOwnerOrAdmin,
     StandardController.deleteProductFromPage
 );
 
