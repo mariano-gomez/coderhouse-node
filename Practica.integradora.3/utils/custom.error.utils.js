@@ -4,6 +4,7 @@ class CustomError extends Error {
         ROUTING_ERROR: 1,
         DATABASE_ERROR: 2,
         INPUT_ERROR: 3,
+        PERMISSION_ERROR: 4,
         UNKNOWN_ERROR: 99,
     };
 

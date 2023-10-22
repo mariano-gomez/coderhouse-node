@@ -57,8 +57,10 @@ class ProductsApiController {
 
     static createProduct = async (req, res, next) => {
         const { body } = req;
-
         try {
+            if (req.user?.email) {
+                body.owner = req.user.email;
+            }
             const newProduct = await productManager.create(body);
             res.status(201).send(newProduct);
         } catch (e) {

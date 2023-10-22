@@ -56,6 +56,9 @@ class StandardController {
         const { body } = req;
 
         try {
+            if (req.user?.email) {
+                body.owner = req.user.email;
+            }
             await productManager.create(body);
             res.redirect('/');
         } catch (e) {

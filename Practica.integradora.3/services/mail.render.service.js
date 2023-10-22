@@ -1,5 +1,15 @@
+const dependencyContainer = require('../dependency.injection');
+const _dotenv = dependencyContainer.get('dotenv');
 
 class MailRenderService {
+
+    static renderRestorePassword(hash) {
+        return `Para actualizar tu contraseña, hacé click en el siguiente enlace:<br/>
+            <button>
+                <a href="${_dotenv.SITE_URL}/new-password/?id=${hash}"> Cambiar contraseña</a>
+            </button>
+        `;
+    }
 
     static renderTicket(ticketData) {
         return `

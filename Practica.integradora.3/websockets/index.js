@@ -8,13 +8,25 @@ const logger = dependencyContainer.get('logger');
 
 const socketProductValidator = require('../middlewares/socket.middleware/socket.product.validator.middleware');
 
-async function getUserRole(socket) {
+async function getUser(socket) {
     const session = socket.request.session;
     if (session?.passport?.user) {
         const user = await userManager.getById(session.passport.user);
-        return user?.role;
+        return user;
     }
     return null;
+}
+
+function isRoleAllowed(action, role) {
+    switch (action) {
+        case 'product.create':
+        case 'product.delete':
+            return ['admin', 'premium'].includes(role);
+        case 'chat-message':
+            return ['user', 'premium'].includes(role);
+        default:
+            return false
+    }
 }
 
 async function socketManagerFunction(socket) {
@@ -30,12 +42,13 @@ async function socketManagerFunction(socket) {
 
     //  Product related events
     socket.on('product.create', async (product) => {
-        const userRole = await getUserRole(socket);
-        if (userRole !== 'admin') {  //  only users are allowed to create messages
+        const user = await getUser(socket);
+        if (isRoleAllowed('product.create', user?.role)) {
             socket.emit('products.create.error', `Solo los administradores pueden crear productos`);
             return;
         }
 
+        product.owner = user?.email || 'admin';
         const error = socketProductValidator(product);
         if (!error) {
             await productManager.create(product);
@@ -53,25 +66,31 @@ async function socketManagerFunction(socket) {
     });
 
     socket.on('product.delete.request', async (productId) => {
-        const userRole = await getUserRole(socket);
-        if (userRole !== 'admin') {  //  only users are allowed to create messages
-            socket.emit('products.delete.error', `Solo los administradores pueden borrar productos`);
-            return;
-        }
+        const user = await getUser(socket);
+        const product = await productManager.getById(productId);
 
-        if (!await productManager.getById(productId)) {
+        if (!product) {
             socket.emit('products.delete.error', `El producto no existe`);
             return;
         }
 
-        await productManager.delete(productId);
+        if (isRoleAllowed('product.delete', user?.role)) {
+            if (user.role == 'premium' && product.owner != user.email) {
+                socket.emit('products.delete.error', `Sólo puede borrar sus propios productos`);
+                return;
+            }
+            socket.emit('products.delete.error', `Solo los administradores pueden borrar productos`);
+            return;
+        }
 
+        await productManager.delete(productId);
         //  I don't emit anything here, because the emit part is already done within the delete() method
     });
 
     socket.on('chat-message', async (msg) => {
-        const userRole = await getUserRole(socket);
-        if (userRole === 'user') {  //  only users are allowed to create messages
+        const user = await getUser(socket);
+
+        if (isRoleAllowed('chat-message', user?.role)) {
             await chatMessageManager.create(msg);
             socket.emit('chat-message', msg);
             socket.broadcast.emit('chat-message', msg);

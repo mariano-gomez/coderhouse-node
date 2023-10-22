@@ -88,7 +88,7 @@ class CartManager {
         cart.products = [];
 
         for (const product of products) {
-            const { product: productId, quantity } = product;
+            const { product: { _id: productId }, quantity } = product;
             cart.products.push({
                 product: new Types.ObjectId(productId),
                 quantity

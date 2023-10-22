@@ -8,9 +8,15 @@ const UsersController = require('../controllers/users.controller');
 const router = Router();
 
 router.get('/login', isNotAuth, UsersController.showLoginPage);
-router.get('/signup', UsersController.showSignupPage);
+router.get('/signup', isNotAuth, UsersController.showSignupPage);
 router.get('/profile', isAuth, UsersController.showProfilePage);
+router.get('/forgot-password', UsersController.showForgottenPasswordPage);
+router.post('/forgot-password', UsersController.postForgottenPasswordPage);
+router.get('/new-password', UsersController.newPasswordPage);
+router.post('/new-password', UsersController.postNewPasswordPage);
 
+
+//  passport.js related routes
 router.post('/login', isNotAuth, passport.authenticate('local-login', {
     failureRedirect: '/login',
 }), UsersController.loginHandler);

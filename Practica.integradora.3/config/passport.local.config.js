@@ -27,6 +27,7 @@ const signupStrategyCallback = async (req, email, password, done) => {
         newUser = await userManager.create({
             ...user,
             email,
+            forgotPasswordRequestDate: null,
             password: hashPassword(password)
         });
 

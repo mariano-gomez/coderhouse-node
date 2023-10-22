@@ -40,6 +40,7 @@ const gitHubStrategyCallback = async (accessToken, refreshToken, profile, done) 
 
                 email: userData.email,
                 password: "",
+                forgotPasswordRequestDate: null,
                 gender: null
             }
 
