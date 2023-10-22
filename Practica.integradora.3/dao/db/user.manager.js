@@ -32,6 +32,7 @@ class UserManager {
       age,
       password,
       role,
+      forgotPasswordRequestDate,
       cart
     } = user;
 
@@ -42,6 +43,7 @@ class UserManager {
       age,
       password,
       role,
+      forgotPasswordRequestDate,
       cart
     } });
   }

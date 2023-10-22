@@ -8,7 +8,8 @@ const schema = new Schema({
     age: Number,
     role: { type: String, default: 'user' },    //  not yet
     cart: { type: Schema.Types.ObjectId, ref: 'carts' },
-    createdDate: { type: Number, default: Date.now() }
+    createdDate: { type: Number, default: Date.now() },
+    forgotPasswordRequestDate: { type: String, default: null }
 });
 
 const userModel = model('users', schema);
