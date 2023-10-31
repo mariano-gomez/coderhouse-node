@@ -1,0 +1,270 @@
+paths:
+  /api/carts:
+    post:
+      tags:
+        - cart
+      description: Crea un nuevo carrito vacío. No lleva request body
+      responses:
+        201:
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#components/schemas/CartItem'
+  /api/carts/{cid}/purchase:
+    put:
+      tags:
+        - cart
+      description: Genera un ticket con los productos que están en el carrito, y cuyo stock en catálogo es suficiente para cubrir los que se agregaron al carrito. Los productos sin suficiente stock, permanecen en el carrito. El cuerpo del request puede estar vacío
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#components/responses/PurchaseResponse'
+  /api/carts/{cid}:
+    get:
+      tags:
+        - cart
+      description: Obtiene el contenido (ids de productos y cantidad de cada uno) del carrito especificado
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          description: Id del producto
+          schema:
+            type: string
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#components/schemas/CartItem'
+    put:
+      tags:
+        - cart
+      description: Reemplaza el contenido completo del carrito con id `:cid` con el contenido de la peticion
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          description: Id del carrito
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#components/requestBodies/CartItemWithoutCartId'
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#components/schemas/CartItem'
+    delete:
+      tags:
+        - cart
+      description: Elimina todos los productos del carrito con id `:cid`
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          description: Id del carrito
+          schema:
+            type: string
+      responses:
+        204:
+          description: El carrito fue vaciado de forma exitosa
+  /api/carts/{cid}/products/{pid}:
+    post:
+      tags:
+        - cart
+      description: Si el producto no existe en el carrito, lo agrega con una cantidad de 1 unidad. Si ya estaba cargado en el carrito, aumenta su cantidad en 1 unidad
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#components/schemas/CartItem'
+    put:
+      tags:
+        - cart
+      description: Ajusta la cantidad de productos con id `:pid` en el carrito con id `:cid`
+      requestBody:
+        required: true
+        content:
+          application/json:
+            type: integer
+            description: solamente un numero, sin ningun tipo de formato
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#components/schemas/CartItem'
+    delete:
+      tags:
+        - cart
+      description: Elimina el producto con id `{pid}` del carrito con id `{cid}`
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          description: Id del carrito
+          schema:
+            type: string
+        - name: pid
+          in: path
+          required: true
+          description: Id del producto
+          schema:
+            type: string
+      responses:
+        204:
+          description: El producto fue eliminado del carrito de forma exitosa
+
+components:
+  responses:
+    PurchaseResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          description: Valores posibles son `success` o `error`
+        payload:
+            type: object
+            $ref: '#components/schemas/PurchaseData'
+  requestBodies:
+    CartItemWithoutCartId:
+      type: object
+      properties:
+        product:
+          type: object
+          $ref: '#components/schemas/Product'
+        quantity:
+          type: integer
+  schemas:
+    CartItem:
+      type: object
+      properties:
+        product:
+            type: object
+            $ref: '#components/schemas/Product'
+        quantity:
+          type: integer
+        _id:
+          type: string
+          format: ObjectId
+          description: Id del carrito
+    Product:
+      type: object
+      properties:
+        _id:
+          type: string
+          format: ObjectId
+          description: Id de mongo
+        title:
+          type: string
+        description:
+          type: string
+        code:
+          type: string
+        price:
+          type: number
+          format: float
+        status:
+          type: boolean
+        stock:
+          type: integer
+        category:
+          type: string
+        thumbnails:
+          type: array
+          items:
+            $ref: '#components/schemas/ProductThumbnail'
+        createdDate:
+          type: integer
+        owner:
+          type: string
+    ProductThumbnail:
+      type: string
+    PurchaseData:
+      type: object
+      properties:
+        ticket:
+          type: object
+          $ref: '#components/schemas/TicketData'
+        unavailable:
+          type: array
+          items:
+            $ref: '#components/schemas/UnavailableProductTicketData'
+    TicketData:
+      type: object
+      properties:
+        user:
+          type: string
+          format: ObjectId
+          description: Id de mongo
+        code:
+          type: integer
+          description: El codigo del ticket
+        amount:
+          type: number
+        products:
+          type: array
+          items:
+            $ref: '#components/schemas/ProductOnTicketData'
+        purchaser:
+          type: string
+          format: email
+        purchase_datetime:
+          type: integer
+        _id:
+          type: string
+          format: ObjectId
+          description: Id del ticket en la persistencia
+    ProductOnTicketData:
+      type: object
+      properties:
+        _id:  #
+          type: string
+          format: ObjectId
+          description: Id de mongo
+        title:  #
+          type: string
+        quantity: #
+          type: integer
+        unit_price: #
+          type: number
+        subtotal: #
+          type: number
+    UnavailableProductTicketData:
+      type: object
+      properties:
+        id:
+          type: string
+          format: ObjectId
+          description: Id de mongo
+        title:
+          type: integer
+        in_cart:
+          type: number
+          description: Cantidad de items en el carrito
+        in_stock:
+          type: number
+          description: Cantidad de items en stock (al momento de intentar hacer la compra)
