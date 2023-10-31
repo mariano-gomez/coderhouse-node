@@ -1,0 +1,215 @@
+paths:
+  /api/products:
+    get:
+      tags:
+        - product
+      description: Retorna un listado de productos de forma paginada, junto con informacion relevante sobre la paginacion
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#components/responses/GetAllProduct'
+    post:
+      tags:
+        - product
+      description: Crea un nuevo producto
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#components/requestsBodies/ProductRequestBody'
+      responses:
+        201:
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#components/schemas/CompleteProduct'
+  /api/products/{pid}:
+    get:
+      tags:
+        - product
+      description: Si existe, muestra la información del producto especificado
+      parameters:
+        - name: pid
+          in: path
+          required: true
+          description: Id del producto
+          schema:
+            type: string
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#components/schemas/Product'
+    delete:
+      summary: 'Borrar un producto'
+      tags:
+        - product
+      description: Elimina de la persistencia el producto especificado
+      parameters:
+        - name: pid
+          in: path
+          required: true
+          description: Id del producto
+          schema:
+            type: string
+      responses:
+        204:
+          description: El producto fue borrado de forma exitosa
+    put:
+      tags:
+        - product
+      description: Edita el producto especificado
+      parameters:
+        - name: pid
+          in: path
+          required: true
+          description: Id del producto
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#components/requestsBodies/ProductRequestBody'
+components:
+  requestsBodies:
+    ProductRequestBody:
+      type: object
+      properties:
+        _id:
+          type: string
+          format: ObjectId
+          description: Id del producto
+        title:
+          type: string
+          description: Titulo del producto
+        description:
+          type: string
+          description: Descripcion del producto
+        code:
+          type: string
+          description: Codigo (alfanumerico) del producto
+        price:
+          type: number
+          description: Precio del producto
+        status:
+          type: boolean
+          description: Disponibilidad del producto
+        stock:
+          type: integer
+          description: Stock del producto
+        thumbnails:
+          description: Array de imagenes del producto
+          type: array
+          items:
+            $ref: '#components/schemas/ProductThumbnail'
+        createdDate:
+          type: integer
+          description: Fecha de creacion del producto
+
+  responses:
+    GetAllProduct:
+      type: object
+      properties:
+        status:
+          type: string
+        payload:
+          type: array
+          items:
+            $ref: '#components/schemas/Product'
+        totalPages:
+          type: integer
+        prevPage:
+          type: integer
+          nullable: true
+        nextPage:
+          type: integer
+          nullable: true
+        page:
+          type: integer
+        hasPrevPage:
+          type: boolean
+        hasNextPage:
+          type: boolean
+        prevLink:
+          type: string
+          nullable: true
+        nextLink:
+          type: string
+          nullable: true
+  schemas:
+    ProductThumbnail:
+      type: string
+    Product:
+      type: object
+      properties:
+        _id:
+          type: string
+          format: ObjectId
+          description: Id de mongo
+        title:
+          type: string
+        description:
+          type: string
+        code:
+          type: string
+        price:
+          type: number
+          format: float
+        status:
+          type: boolean
+        stock:
+          type: integer
+        category:
+          type: string
+        thumbnails:
+          type: array
+          items:
+            $ref: '#components/schemas/ProductThumbnail'
+        createdDate:
+          type: integer
+        owner:
+          type: string
+        id:
+          type: string
+          format: ObjectId
+          description: Alias de `_id`
+    CompleteProduct:
+      type: object
+      properties:
+        _id:
+          type: string
+          format: ObjectId
+          description: Id de mongo
+        title:
+          type: string
+        description:
+          type: string
+        code:
+          type: string
+        price:
+          type: number
+          format: float
+        status:
+          type: boolean
+        stock:
+          type: integer
+        category:
+          type: string
+        owner:
+          type: string
+        thumbnails:
+          type: array
+          items:
+            $ref: '#components/schemas/ProductThumbnail'
+        createdDate:
+          type: integer
