@@ -1,6 +1,6 @@
 const { Router } = require('express');
 const { createProductValidatorMiddleware, updateProductValidatorMiddleware } = require('../../middlewares/ProductValidator.middleware');
-const authorizeRole = require('../../middlewares/auth/authorize.role.middleware');
+const authorizeRole = require('../../middlewares/auth/authorize.role.api.middleware');
 const isProductOwnerOrAdmin = require('../../middlewares/auth/is.product.owner.or.admin.middleware');
 const CartsApiController = require('../../controllers/api/products.controller');
 

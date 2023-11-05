@@ -4,7 +4,7 @@ const cartAddingProductValidatorMiddleware = require('../../middlewares/cartAddi
 const ownProductCantBeAddedToCart = require('../../middlewares/auth/own.product.cant.be.added.to.cart.middleware');
 const ownProductsCantBeAddedToCart = require('../../middlewares/auth/own.products.cant.be.added.to.cart.middleware');
 const CartsApiController = require('../../controllers/api/carts.controller');
-const authorizeRole = require("../../middlewares/auth/authorize.role.middleware");
+const authorizeRole = require("../../middlewares/auth/authorize.role.api.middleware");
 
 const router = express.Router();
 

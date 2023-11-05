@@ -10,7 +10,8 @@ class UserDto {
             email: userData.email,
             age: userData.age,
             role: userData.role,
-            cart: userData.cart
+            cart: userData.cart,
+            id: userData._id
         };
     }
 }

@@ -9,13 +9,17 @@
     "start:dev:file": "nodemon --ignore '*.json' app.js --env development --persist file",
     "start:prod:mongo": "node app.js --env production --persist mongo",
     "start:prod:file": "node app.js --env production --persist file",
-    "seed:products": "node ./scripts/seeder.products.js"
+    "seed:products": "node ./scripts/seeder.products.js",
+    "test": "mocha test/integration.test.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "nodemon": "^2.0.22"
+    "chai": "^4.3.10",
+    "mocha": "^10.2.0",
+    "nodemon": "^2.0.22",
+    "supertest": "^6.3.3"
   },
   "dependencies": {
     "@faker-js/faker": "^8.1.0",
