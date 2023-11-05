@@ -43,7 +43,9 @@ Ejecutar `npm start` es el equivalente a ejecutar `npm run start:prod`
     - `routes/` contiene los manejadores para todas las rutas contempladas del proyecto
     - `scripts/` contiene scripts que eventualmente pueden facilitar la tarea de rellenar la DB con información
     - `services/` contiene clases de servicios que pueden ser requeridos en distintos controllers (envio de mensajes, renderizado de correos, cierre de compras)
-    - `utils/` codigo complementario que puede ser requerido en distintas partes del sistema
+    - `swagger/` aquí se ubican los archivos con la especificacion de los endpoints, para poder documentarlos con swagger
+    - `test/` aquí se encuentran los archivos para la ejecución de pruebas de integración/unitarias
+    - `utils/` código complementario que puede ser requerido en distintas partes del sistema
     - `views/` plantillas handlebars
     - `websockets/` código vinculado al comportamiento del server con websockets
     - `app.js` el archivo principal del proyecto
@@ -84,3 +86,10 @@ Ejecutar `npm start` es el equivalente a ejecutar `npm run start:prod`
 - `[GET] /cart/:id` Página para ver los productos cargados en el carrito del usuario logueado actualmente (redirecciona si no hay usuario logueado)
 - `[GET] /mockingproducts` Devuelve un listado de productos generados aleatoriamente con la libreria faker (100 por defecto, se puede alterar este numero agregando un argumento `quantity=<numero>` al queryString)
 - `[GET] /loggerTest` Genera una línea de log por cada tipo de nivel configurado en el sistema
+
+## Tests
+
+Para correr el script de pruebas, hay que lanzar el servidor desde una terminal, y desde otra ejecutar lo siguiente:
+```shell
+npm run test
+```
