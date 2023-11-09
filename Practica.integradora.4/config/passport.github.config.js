@@ -63,7 +63,8 @@ const gitHubStrategyCallback = async (accessToken, refreshToken, profile, done) 
         try {
             await userManager.save(newUser._id, {
                 cart,
-                ...newUser
+                ...newUser,
+                last_connection: Date.now()
             });
 
             return done(null, {
@@ -80,6 +81,10 @@ const gitHubStrategyCallback = async (accessToken, refreshToken, profile, done) 
         }
 
     }
+    await userManager.save(user._id, {
+        last_connection: Date.now()
+    });
+
     //  if the user exists, i simply return it
     return done(null, user);
 };

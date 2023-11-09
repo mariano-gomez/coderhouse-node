@@ -33,7 +33,8 @@ class UserManager {
       password,
       role,
       forgotPasswordRequestDate,
-      cart
+      cart,
+      last_connection,
     } = user;
 
     await userModel.updateOne({ _id: id }, { $set: {
@@ -44,7 +45,8 @@ class UserManager {
       password,
       role,
       forgotPasswordRequestDate,
-      cart
+      cart,
+      last_connection,
     } });
   }
 

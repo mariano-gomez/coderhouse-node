@@ -32,10 +32,14 @@ class UsersController {
     };
 
     static logoutHandler = (req, res) => {
-        req.logOut((err) => {
+        const userData = req.user;
+        req.logOut(async (err) => {
             if (err) {
                 res.redirect('/back');
             } else {
+                await userManager.save(userData._id, {
+                    last_connection: Date.now()
+                });
                 res.redirect('/login');
             }
         });

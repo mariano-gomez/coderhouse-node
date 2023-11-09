@@ -49,7 +49,8 @@ const signupStrategyCallback = async (req, email, password, done) => {
     try {
         await userManager.save(newUser._id, {
             cart,
-            ...newUser
+            ...newUser,
+            last_connection: Date.now()
         });
 
         const storedUser = await userManager.getById(newUser._id);
@@ -82,6 +83,10 @@ const loginStrategyCallback = async (email, password, done) => {
             logger.http('passport local strategy (login): credentials mismatch');
             return done(null, false);
         }
+
+        await userManager.save(_user._id, {
+            last_connection: Date.now()
+        });
 
         done(null, _user);
 
