@@ -1,6 +1,6 @@
 const { Router } = require('express');
 
-const apiAuthWithSessionsRoutes = require('./api/sessions.router');
+const apiAuthWithSessionsRoutes = require('./api/users.router');
 const productsRoutes = require('./api/products.router');
 const cartsRoutes = require('./api/carts.router');
 const standardRoutes = require('./standard.router');
