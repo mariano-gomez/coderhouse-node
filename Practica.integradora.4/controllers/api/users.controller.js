@@ -4,6 +4,7 @@ const userManager = factoryDAO.getInstance('user');
 const UserDto = require('../../dao/dto/user.dto');
 const CustomError = require("../../utils/custom.error.utils");
 
+//  With sessions
 class SessionsApiController {
 
     static currentUser = (req, res) => {
@@ -22,6 +23,10 @@ class SessionsApiController {
         }
         const updatedUser = await userManager.getById(uid);
         res.send(UserDto.parse(updatedUser));
+    }
+
+    static uploadDocuments = async (req, res, next) => {
+        res.send({ok});
     }
 }
 
