@@ -16,6 +16,10 @@ const customErrorHandlerMiddleware = (error, req, res, next) => {
                 req.logger.error(error.message);
                 res.status(error.status).send({ status: "error", error: error.message, type: 'DATABASE_ERROR' });
                 break;
+            case CustomError.ERROR_TYPES.PERMISSION_ERROR:
+                req.logger.error(error.message);
+                res.status(error.status).send({ status: "error", error: error.message, type: 'PERMISSION_ERROR' });
+                break;
             default:
                 req.logger.error(error.message);
                 res.status(error.status).send({ status: "error", error: "Unhandled error", type: 'CustomError' });

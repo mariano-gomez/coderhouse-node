@@ -43,6 +43,7 @@ Ejecutar `npm start` es el equivalente a ejecutar `npm run start:prod`
     - `routes/` contiene los manejadores para todas las rutas contempladas del proyecto
     - `scripts/` contiene scripts que eventualmente pueden facilitar la tarea de rellenar la DB con información
     - `services/` contiene clases de servicios que pueden ser requeridos en distintos controllers (envio de mensajes, renderizado de correos, cierre de compras)
+    - `storage/` aquí se van a almacenar los documentos e imágenes que suban los usuarios.
     - `swagger/` aquí se ubican los archivos con la especificacion de los endpoints, para poder documentarlos con swagger
     - `test/` aquí se encuentran los archivos para la ejecución de pruebas de integración/unitarias
     - `utils/` código complementario que puede ser requerido en distintas partes del sistema
@@ -70,7 +71,13 @@ Ejecutar `npm start` es el equivalente a ejecutar `npm run start:prod`
     - `[PUT] /api/carts/:cid/purchase` Genera un ticket con los productos que están en el carrito, y cuyo stock en catálogo es suficiente para cubrir los que se agregaron al carrito. Los productos sin suficiente stock, permanecen en el carrito. El cuerpo del request puede estar vacío
 - `users`
     - `[GET] /api/users/current` si hay un usuario logueado, muestra la información del usuario con sesión abierta
-    - `[PUT] /api/users/premium/:uid` si el usuario `:uid` no tiene rol de `admin`, intercambia el rol del usuario entre `user` y `premium`, dependiendo el rol que tiene al invocar este endpoint
+    - `[PUT] /api/users/premium/:uid` intercambia el rol del usuario entre `user` y `premium` (siempre y cuando el usuario `:uid` no sea `admin`), debe tener subidos los documentos obligatorios en su perfil (ver endpoint `/api/users/:uid/documents`)
+    - `[PUT] /api/users/:uid/documents` Permite subir documentos e imagenes al usuario con `:uid`. Los nombres de los campos son:
+      - `accountState`: Comprobante de estado de cuenta (sólo se guarda la última versión subida del archivo)
+      - `address`: Comprobante de domicilio (sólo se guarda la última versión subida del archivo)
+      - `id`: Identificación del usuario (sólo se guarda la última versión subida del archivo)
+      - `products`: Imágenes de productos. Se acumulan a medida que se suben
+      - `others`: Cualquier otro tipo de documentos. Se acumulan a medida que se suben
 
 ## Urls
 - `[GET] /` Página "home", que muestra el listado de productos existentes hasta el momento
