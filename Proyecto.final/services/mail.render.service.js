@@ -33,6 +33,18 @@ class MailRenderService {
         `;
     }
 
+    static renderUserDeletedNotification(user) {
+        return `
+            <h2>Cuenta eliminada</h2>
+            <p>
+                Hola ${user.first_name}!<br>
+                Lamentamos tener que comunicarnos contigo, porque hace más de dos días que no te vemos conectado.
+                Pero ey! Siempre podés volver a registrarte! Aunque, en caso que tuvieras productos en el carrito, 
+                deberás volver a agregarlos.
+            </p>
+        `;
+    }
+
     static #ticketProductRows(products) {
         let html = ``;
         for (let product of products) {

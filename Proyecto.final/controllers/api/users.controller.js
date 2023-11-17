@@ -10,6 +10,8 @@ const { renameFile } = require('../../utils/multer.utils');
 //  With sessions
 class UsersApiController {
 
+    static DELETE_USERS_INACTIVE_SINCE = 3 * 24 * 60 * 60 * 1000;
+
     static currentUser = (req, res) => {
         res.send(UserDto.parse(req.user));
     }
@@ -18,6 +20,16 @@ class UsersApiController {
         const dbUsers = await userManager.getAll();
         const users = dbUsers.map(dbUser => UserDto.parseBasicData(dbUser));
         res.send({ 'status': 'success', 'payload': users });
+    }
+
+    static removeUsersInactiveSince = async (req, res, next) => {
+        let result;
+        try {
+            result = await userManager.removeUsersInactiveSince(this.DELETE_USERS_INACTIVE_SINCE);
+        } catch (e) {
+            return next(e);
+        }
+        res.send({ 'status': 'success', 'payload': { deletedCount: result } });
     }
 
     static swapUserRole = async (req, res, next) => {

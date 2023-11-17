@@ -25,4 +25,9 @@ router.get('/',
     UsersApiController.listUsers
 );
 
+router.delete('/',
+    authorizeRole(['admin']),
+    UsersApiController.removeUsersInactiveSince
+);
+
 module.exports = router;
