@@ -14,6 +14,12 @@ class UsersApiController {
         res.send(UserDto.parse(req.user));
     }
 
+    static listUsers = async (req, res) => {
+        const dbUsers = await userManager.getAll();
+        const users = dbUsers.map(dbUser => UserDto.parseBasicData(dbUser));
+        res.send({ 'status': 'success', 'payload': users });
+    }
+
     static swapUserRole = async (req, res, next) => {
         const { uid } = req.params;
         const user = await userManager.getById(uid);

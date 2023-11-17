@@ -1,6 +1,7 @@
 const { Router } = require('express');
 const UsersApiController = require('../../controllers/api/users.controller');
 const { attachedFiles } = require('../../utils/multer.utils');
+const authorizeRole = require("../../middlewares/auth/authorize.role.api.middleware");
 
 const router = Router();
 
@@ -17,6 +18,11 @@ router.put('/:uid/documents',
         { name: 'others' }
     ]),
     UsersApiController.uploadDocuments
+);
+
+router.get('/',
+    authorizeRole(['admin']),
+    UsersApiController.listUsers
 );
 
 module.exports = router;
