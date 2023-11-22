@@ -30,4 +30,9 @@ router.delete('/',
     UsersApiController.removeUsersInactiveSince
 );
 
+router.delete('/:uid',
+    authorizeRole(['admin']),
+    UsersApiController.deleteUser
+);
+
 module.exports = router;

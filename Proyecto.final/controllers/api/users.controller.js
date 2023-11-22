@@ -31,6 +31,18 @@ class UsersApiController {
         }
         res.send({ 'status': 'success', 'payload': { deletedCount: result } });
     }
+    static deleteUser = async (req, res) => {
+        const { uid } = req.params;
+
+        if (!await userManager.getById(uid)) {
+            res.sendStatus(404);
+            return;
+        }
+
+        await userManager.delete(uid);
+
+        res.sendStatus(204);
+    };
 
     static swapUserRole = async (req, res, next) => {
         const { uid } = req.params;
