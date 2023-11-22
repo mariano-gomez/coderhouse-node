@@ -10,7 +10,7 @@ const { renameFile } = require('../../utils/multer.utils');
 //  With sessions
 class UsersApiController {
 
-    static DELETE_USERS_INACTIVE_SINCE = 3 * 24 * 60 * 60 * 1000;
+    static DELETE_USERS_INACTIVE_SINCE = 2 * 24 * 60 * 60 * 1000;
 
     static currentUser = (req, res) => {
         res.send(UserDto.parse(req.user));

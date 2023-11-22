@@ -78,6 +78,8 @@ Ejecutar `npm start` es el equivalente a ejecutar `npm run start:prod`
       - `id`: Identificación del usuario (sólo se guarda la última versión subida del archivo)
       - `products`: Imágenes de productos. Se acumulan a medida que se suben
       - `others`: Cualquier otro tipo de documentos. Se acumulan a medida que se suben
+    - `[DELETE] /api/users/:uid` si existe, elimina el usuario con `:uid` (sólo puede borrarse con un usuario `admin`)
+    - `[DELETE] /api/users` Elimina todos los usuarios que no han tenido actividad en los úlitmos 2 días
 
 ## Urls
 - `[GET] /` Página "home", que muestra el listado de productos existentes hasta el momento
