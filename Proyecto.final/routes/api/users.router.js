@@ -9,6 +9,11 @@ router.get('/current', UsersApiController.currentUser);
 
 router.put('/premium/:uid', UsersApiController.swapUserRole);
 
+router.put('/:uid/changeRole',
+    authorizeRole(['admin']),
+    UsersApiController.changeUserRole
+);
+
 router.put('/:uid/documents',
     attachedFiles.fields([
         { name: 'id' },

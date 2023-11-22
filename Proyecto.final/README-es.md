@@ -72,6 +72,7 @@ Ejecutar `npm start` es el equivalente a ejecutar `npm run start:prod`
 - `users`
     - `[GET] /api/users/current` si hay un usuario logueado, muestra la información del usuario con sesión abierta
     - `[PUT] /api/users/premium/:uid` intercambia el rol del usuario entre `user` y `premium` (siempre y cuando el usuario `:uid` no sea `admin`), debe tener subidos los documentos obligatorios en su perfil (ver endpoint `/api/users/:uid/documents`)
+    - `[PUT] /api/users/:uid/changeRole` Permite cambiar el rol del usuario indicado en la url. Sólo puede ser ejecutado por un admin. El cuerpo de la petición debe llevar el campo `role`
     - `[PUT] /api/users/:uid/documents` Permite subir documentos e imagenes al usuario con `:uid`. Los nombres de los campos son:
       - `accountState`: Comprobante de estado de cuenta (sólo se guarda la última versión subida del archivo)
       - `address`: Comprobante de domicilio (sólo se guarda la última versión subida del archivo)

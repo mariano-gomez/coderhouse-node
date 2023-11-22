@@ -68,6 +68,34 @@ class UsersApiController {
         res.send(UserDto.parse(updatedUser));
     }
 
+    static changeUserRole = async (req, res, next) => {
+        const { uid } = req.params;
+        const { role } = req.body;
+        const user = await userManager.getById(uid);
+
+        if (['user', 'premium', 'admin'].indexOf(role) < 0) {
+            new CustomError(
+                `Rol no válido`,
+                CustomError.ERROR_TYPES.INPUT_ERROR,
+                400
+            );
+        }
+
+        if (role == 'premium' && !userManager.userHasUploadedRequiredDocuments(user)) {
+            return next(
+                new CustomError(
+                    `A este usuario le falta subir al menos uno de los siguientes documentos: 'id', 'address', 'accountState'.`,
+                    CustomError.ERROR_TYPES.PERMISSION_ERROR,
+                    403
+                )
+            );
+        }
+
+        await userManager.save(uid, { role: role });
+        const updatedUser = await userManager.getById(uid);
+        res.send(UserDto.parse(updatedUser));
+    }
+
     static uploadDocuments = async (req, res, next) => {
         const { uid } = req.params;
 
