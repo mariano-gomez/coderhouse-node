@@ -97,6 +97,7 @@ Ejecutar `npm start` es el equivalente a ejecutar `npm run start:prod`
 - `[GET] /mockingproducts` Devuelve un listado de productos generados aleatoriamente con la libreria faker (100 por defecto, se puede alterar este numero agregando un argumento `quantity=<numero>` al queryString)
 - `[GET] /loggerTest` Genera una línea de log por cada tipo de nivel configurado en el sistema
 - `[GET] /swaggerdocs` Permite ver la documentacion autogenerada por swagger relativa a los endpoints y rutas vinculadas a los carritos y a los productos
+- `[GET] /admin/users` Permite ver el listado de usuarios que hay en el sistema (sólo accesible para administradores)
 
 ## Tests
 

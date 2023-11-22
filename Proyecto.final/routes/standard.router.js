@@ -5,6 +5,7 @@ const isProductOwnerOrAdmin = require('../middlewares/auth/is.product.owner.or.a
 const ownProductCantBeAddedToCart = require('../middlewares/auth/own.product.cant.be.added.to.cart.middleware');
 const StandardController = require('../controllers/standard.controller');
 const mockerRoutes = require('./mocker.router');
+const adminRoutes = require("./admin");
 
 const { createProductValidatorMiddleware } = require('../middlewares/ProductValidator.middleware');
 const cartAddingProductValidatorMiddleware = require("../middlewares/cartAddingProductValidator.middleware");
@@ -13,6 +14,10 @@ const checkProductExistsValidatorMiddleware = require("../middlewares/CheckProdu
 const router = Router();
 
 router.use(mockerRoutes);
+router.use('/admin',
+    authorizeRole(['admin']),
+    adminRoutes
+);
 
 router.get('/', isAuth, StandardController.showMainPage);
 
