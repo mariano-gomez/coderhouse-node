@@ -1,13 +1,8 @@
 const { Router } = require('express');
-const UserDTO = require("../../dao/dto/user.dto");
+const AdminUsersController = require("../../controllers/admin/users.controller");
 
 const router = Router();
 
-router.get('/', (req, res) => {
-    res.render('admin/listUsers', {
-        layout: 'adminLayout',
-        user: UserDTO.parse(req.user),
-    });
-});
+router.get('/', AdminUsersController.listUsersPage);
 
 module.exports = router;
