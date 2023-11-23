@@ -144,7 +144,7 @@ class UserManager {
       try {
         const html = MailRenderService.renderUserDeletedNotification(user);
         logger.info(`Notificando eliminacion de cuenta a ${user.email}`)
-        await mailSenderService.send(`marianogomez+coderhouse@gmail.com`, html, 'Cuenta cerrada por inactividad prolongada');
+        await mailSenderService.send(user.email, html, 'Cuenta cerrada por inactividad prolongada');
         await userModel.deleteOne({ _id: user._id });
         deletedCount++;
       } catch (e) {
