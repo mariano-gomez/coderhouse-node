@@ -45,6 +45,22 @@ class MailRenderService {
         `;
     }
 
+    static renderProductDeletedNotification(product) {
+        return `
+            <h2>Producto eliminado</h2>
+            <p>
+                Hola!<br>
+                Te enviamos este correo para informarte que el producto: <br>
+                <p>
+                    TITULO: <b>${product.title}</b> <br>
+                    CODIGO: <b>${product.code}</b> <br>
+                </p>
+                 ha sido borrado en nuestro sistema. <br>
+                Para volver a verlo, deberás volver a crearlo.
+            </p>
+        `;
+    }
+
     static #ticketProductRows(products) {
         let html = ``;
         for (let product of products) {
