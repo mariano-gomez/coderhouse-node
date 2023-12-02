@@ -62,6 +62,7 @@ Ejecutar `npm start` es el equivalente a ejecutar `npm run start:prod`
     - `[DELETE] /api/products/:pid` Elimina de la persistencia el producto especificado
 - `carts`
     - `[GET] /api/carts/:cid` Obtiene el contenido (ids de productos y cantidad de cada uno) del carrito especificado
+    - `[GET] /api/carts/:cid/availability` Igual que el anterior, pero discriminando los productos en dos grupos, dependiendo de si las unidades en el carrito superan o no el stock 
     - `[POST] /api/carts` Crea un nuevo carrito vacío
     - `[POST] /api/carts/:cid/product/:pid` Si el producto no existe en el carrito, lo agrega con una cantidad de 1 unidad. Si ya estaba cargado en el carrito, aumenta su cantidad en 1 unidad
     - `[DELETE] /api/carts/:cid/product/:pid` Elimina el producto con id `:pid` del carrito con id `:cid`
@@ -72,12 +73,15 @@ Ejecutar `npm start` es el equivalente a ejecutar `npm run start:prod`
 - `users`
     - `[GET] /api/users/current` si hay un usuario logueado, muestra la información del usuario con sesión abierta
     - `[PUT] /api/users/premium/:uid` intercambia el rol del usuario entre `user` y `premium` (siempre y cuando el usuario `:uid` no sea `admin`), debe tener subidos los documentos obligatorios en su perfil (ver endpoint `/api/users/:uid/documents`)
+    - `[PUT] /api/users/:uid/changeRole` Permite cambiar el rol del usuario indicado en la url. Sólo puede ser ejecutado por un admin. El cuerpo de la petición debe llevar el campo `role`
     - `[PUT] /api/users/:uid/documents` Permite subir documentos e imagenes al usuario con `:uid`. Los nombres de los campos son:
       - `accountState`: Comprobante de estado de cuenta (sólo se guarda la última versión subida del archivo)
       - `address`: Comprobante de domicilio (sólo se guarda la última versión subida del archivo)
       - `id`: Identificación del usuario (sólo se guarda la última versión subida del archivo)
       - `products`: Imágenes de productos. Se acumulan a medida que se suben
       - `others`: Cualquier otro tipo de documentos. Se acumulan a medida que se suben
+    - `[DELETE] /api/users/:uid` si existe, elimina el usuario con `:uid` (sólo puede borrarse con un usuario `admin`)
+    - `[DELETE] /api/users` Elimina todos los usuarios que no han tenido actividad en los úlitmos 2 días
 
 ## Urls
 - `[GET] /` Página "home", que muestra el listado de productos existentes hasta el momento
@@ -91,9 +95,11 @@ Ejecutar `npm start` es el equivalente a ejecutar `npm run start:prod`
 - `[GET] /profile` Página para ver la información en el sistema del usuario logueado actualmente (redirecciona si no hay usuario logueado)
 - `[GET] /logout` Enlace para cerrar sesión. Debe redireccionar a `/login`
 - `[GET] /cart/:id` Página para ver los productos cargados en el carrito del usuario logueado actualmente (redirecciona si no hay usuario logueado)
+- `[GET] /purchaseSuccess` La ruta a la que retorna la pasarela de pagos cuando la compra es exitosa. Debería venir con un query parameter llamado `session_id`, que contiene el `id` del ticket de la compra
 - `[GET] /mockingproducts` Devuelve un listado de productos generados aleatoriamente con la libreria faker (100 por defecto, se puede alterar este numero agregando un argumento `quantity=<numero>` al queryString)
 - `[GET] /loggerTest` Genera una línea de log por cada tipo de nivel configurado en el sistema
 - `[GET] /swaggerdocs` Permite ver la documentacion autogenerada por swagger relativa a los endpoints y rutas vinculadas a los carritos y a los productos
+- `[GET] /admin/users` Permite ver el listado de usuarios que hay en el sistema (sólo accesible para administradores)
 
 ## Tests
 

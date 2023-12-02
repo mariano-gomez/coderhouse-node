@@ -14,6 +14,9 @@ router.post('/', CartsApiController.createNewCart);
 //  /api/carts/:cid [get a specific cart content]
 router.get('/:cid', CartsApiController.showCart);
 
+//  /api/carts/:cid/availability [get the cart content in different arrays, depending if there is enough stock or not]
+router.get('/:cid/availability', CartsApiController.showCartAvailability);
+
 //  /api/carts/:cid/product/:pid    [increments a product quantity/add one unit to the cart if it does not exist]
 router.post('/:cid/product/:pid',
     authorizeRole(['user', 'premium']),

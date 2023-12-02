@@ -1,4 +1,8 @@
-const userModel = require('../models/user.model')
+const userModel = require('../models/user.model');
+const mailSenderService = require("../../services/mail.sender.service");
+const MailRenderService = require("../../services/mail.render.service");
+const CustomError = require("../../utils/custom.error.utils");
+const logger = require('../../services/logger.service')
 
 class UserManager {
 
@@ -130,6 +134,24 @@ class UserManager {
     }
 
     await userModel.deleteOne({ _id: id });
+  }
+
+  async removeUsersInactiveSince(miliseconds) {
+    const usersToDelete = await userModel.find({ 'last_connection': { $lt: (Date.now() - miliseconds) } });
+    let deletedCount = 0;
+
+    for (const user of usersToDelete) {
+      try {
+        const html = MailRenderService.renderUserDeletedNotification(user);
+        logger.info(`Notificando eliminacion de cuenta a ${user.email}`)
+        await mailSenderService.send(user.email, html, 'Cuenta cerrada por inactividad prolongada');
+        await userModel.deleteOne({ _id: user._id });
+        deletedCount++;
+      } catch (e) {
+        throw new CustomError('no se pudo enviar notificación de cierre de cuenta', CustomError.ERROR_TYPES.UNKNOWN_ERROR, 500);
+      }
+    }
+    return deletedCount;
   }
 }
 

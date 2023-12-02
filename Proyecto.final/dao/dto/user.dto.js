@@ -14,6 +14,17 @@ class UserDto {
             id: userData._id
         };
     }
+
+    static parseBasicData(userData) {
+        return {
+            name: userData.first_name,
+            first_name: userData.first_name,
+            last_name: userData.last_name,
+            email: userData.email,
+            role: userData.role,
+            id: userData._id
+        };
+    }
 }
 
 module.exports = UserDto;

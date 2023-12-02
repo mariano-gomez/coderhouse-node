@@ -33,6 +33,34 @@ class MailRenderService {
         `;
     }
 
+    static renderUserDeletedNotification(user) {
+        return `
+            <h2>Cuenta eliminada</h2>
+            <p>
+                Hola ${user.first_name}!<br>
+                Lamentamos tener que comunicarnos contigo, porque hace más de dos días que no te vemos conectado.
+                Pero ey! Siempre podés volver a registrarte! Aunque, en caso que tuvieras productos en el carrito, 
+                deberás volver a agregarlos.
+            </p>
+        `;
+    }
+
+    static renderProductDeletedNotification(product) {
+        return `
+            <h2>Producto eliminado</h2>
+            <p>
+                Hola!<br>
+                Te enviamos este correo para informarte que el producto: <br>
+                <p>
+                    TITULO: <b>${product.title}</b> <br>
+                    CODIGO: <b>${product.code}</b> <br>
+                </p>
+                 ha sido borrado en nuestro sistema. <br>
+                Para volver a verlo, deberás volver a crearlo.
+            </p>
+        `;
+    }
+
     static #ticketProductRows(products) {
         let html = ``;
         for (let product of products) {

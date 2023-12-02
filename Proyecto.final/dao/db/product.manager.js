@@ -2,6 +2,9 @@ const productModel = require('./../models/product.model')
 const CustomError = require('../../utils/custom.error.utils');
 const dependencyContainer = require('../../dependency.injection');
 const { Types } = require("mongoose");
+const MailRenderService = require("../../services/mail.render.service");
+const logger = require("../../services/logger.service");
+const mailSenderService = require("../../services/mail.sender.service");
 
 class ProductManager {
 
@@ -55,9 +58,21 @@ class ProductManager {
     }
 
     async delete(id) {
-        const result = await productModel.deleteOne({ _id: id });
+        const product = await this.getById(id);
+        let result;
+        if (product?.owner && product.owner !== 'admin') {
+            try {
+                const html = MailRenderService.renderProductDeletedNotification(product);
+                logger.info(`Notificando eliminacion de producto ${product.code} a owner ${product.owner}`)
+                await mailSenderService.send(product.owner, html, 'Producto eliminado de sitio de ecommerce');
 
-        await this.#updateWebsocket();
+                result = await productModel.deleteOne({ _id: id });
+
+                await this.#updateWebsocket();
+            } catch (e) {
+                throw new CustomError('no se pudo borrar el producto', CustomError.ERROR_TYPES.UNKNOWN_ERROR, 500);
+            }
+        }
 
         return result;
     }

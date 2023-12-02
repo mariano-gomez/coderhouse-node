@@ -1,7 +1,11 @@
 const factory = require("../dao/factory.dao");
 const productManager = factory.getInstance('product');
 const cartManager = factory.getInstance('cart');
+const ticketManager = factory.getInstance('ticket');
 const UserDTO = require("../dao/dto/user.dto");
+const mailSenderService = require("../services/mail.sender.service");
+const MailRenderService = require("../services/mail.render.service");
+const CustomError = require("../utils/custom.error.utils");
 
 class StandardController {
 
@@ -87,6 +91,31 @@ class StandardController {
         await productManager.delete(pid);
         res.redirect('/');
     };
+
+    static confirmPurchase = async (req, res, next) => {
+        const { session_id } = req.query;
+        const ticket = await ticketManager.getById(session_id);
+
+        if (!ticket) {
+            next(CustomError(`El pago se realizó con éxito, pero hubo un problema con la orden. Póngase en contacto con nosotros, y guarde esta información: ${session_id}`, CustomError.ERROR_TYPES.UNKNOWN_ERROR, 500));
+        }
+
+        ticketManager.update(ticket._id, { status: 'completed' });
+
+        const html = MailRenderService.renderTicket(ticket);
+
+        try {
+            await mailSenderService.send(ticket.purchaser, html, 'Nueva compra!');
+        } catch (e) {
+            throw new CustomError('there was a problem trying to send the ticket by email', CustomError.ERROR_TYPES.UNKNOWN_ERROR, 500);
+        }
+
+        res.render('purchase-finished', {
+            products: ticket.products,
+            user: UserDTO.parse(req.user),
+            cid: req.user?.cart?._id
+        });
+    }
 
     //  for requests that matches with no route
     static defaultResponse = (req, res) => {

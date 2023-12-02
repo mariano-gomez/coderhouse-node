@@ -10,9 +10,39 @@ const { renameFile } = require('../../utils/multer.utils');
 //  With sessions
 class UsersApiController {
 
+    static DELETE_USERS_INACTIVE_SINCE = 2 * 24 * 60 * 60 * 1000;
+
     static currentUser = (req, res) => {
         res.send(UserDto.parse(req.user));
     }
+
+    static listUsers = async (req, res) => {
+        const dbUsers = await userManager.getAll();
+        const users = dbUsers.map(dbUser => UserDto.parseBasicData(dbUser));
+        res.send({ 'status': 'success', 'payload': users });
+    }
+
+    static removeUsersInactiveSince = async (req, res, next) => {
+        let result;
+        try {
+            result = await userManager.removeUsersInactiveSince(this.DELETE_USERS_INACTIVE_SINCE);
+        } catch (e) {
+            return next(e);
+        }
+        res.send({ 'status': 'success', 'payload': { deletedCount: result } });
+    }
+    static deleteUser = async (req, res) => {
+        const { uid } = req.params;
+
+        if (!await userManager.getById(uid)) {
+            res.sendStatus(404);
+            return;
+        }
+
+        await userManager.delete(uid);
+
+        res.sendStatus(204);
+    };
 
     static swapUserRole = async (req, res, next) => {
         const { uid } = req.params;
@@ -34,6 +64,34 @@ class UsersApiController {
             const newRole = (user.role == 'user') ? 'premium' : 'user'
             await userManager.save(uid, { role: newRole});
         }
+        const updatedUser = await userManager.getById(uid);
+        res.send(UserDto.parse(updatedUser));
+    }
+
+    static changeUserRole = async (req, res, next) => {
+        const { uid } = req.params;
+        const { role } = req.body;
+        const user = await userManager.getById(uid);
+
+        if (['user', 'premium', 'admin'].indexOf(role) < 0) {
+            new CustomError(
+                `Rol no válido`,
+                CustomError.ERROR_TYPES.INPUT_ERROR,
+                400
+            );
+        }
+
+        if (role == 'premium' && !userManager.userHasUploadedRequiredDocuments(user)) {
+            return next(
+                new CustomError(
+                    `A este usuario le falta subir al menos uno de los siguientes documentos: 'id', 'address', 'accountState'.`,
+                    CustomError.ERROR_TYPES.PERMISSION_ERROR,
+                    403
+                )
+            );
+        }
+
+        await userManager.save(uid, { role: role });
         const updatedUser = await userManager.getById(uid);
         res.send(UserDto.parse(updatedUser));
     }
