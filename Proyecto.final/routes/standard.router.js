@@ -23,6 +23,8 @@ router.get('/', isAuth, StandardController.showMainPage);
 
 router.get('/cart/:cid', isAuth, StandardController.showCartPageById);
 
+router.get('/purchaseSuccess', StandardController.confirmPurchase);
+
 router.post('/cart/:cid/product/:pid/add',
     authorizeRole(['user', 'premium']),
     ownProductCantBeAddedToCart,

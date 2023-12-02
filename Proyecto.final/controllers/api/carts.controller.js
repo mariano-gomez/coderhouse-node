@@ -1,9 +1,11 @@
 const factory = require("../../dao/factory.dao");
 const cartManager = factory.getInstance('cart');
+const productManager = factory.getInstance('product');
 const ticketService = require('../../services/ticket.service');
-const mailSenderService = require("../../services/mail.sender.service");
-const MailRenderService = require("../../services/mail.render.service");
 const CustomError = require("../../utils/custom.error.utils");
+const StripeService = require("../../services/stripe.service");
+const dependencyContainer = require("../../dependency.injection");
+const logger = dependencyContainer.get('logger');
 
 class CartsApiController {
 
@@ -25,6 +27,18 @@ class CartsApiController {
         const cart = await cartManager.getById(cid);
         if (cart) {
             res.send(cart.products);
+        } else {
+            res.sendStatus(404);
+        }
+    };
+
+    //  /api/carts/:cid [get a specific cart content]
+    static showCartAvailability = async (req, res) => {
+        const { cid } = req.params;
+
+        const cart = await cartManager.getById(cid);
+        if (cart) {
+            res.send(await CartsApiController.checkCartContentAvailability(cart));
         } else {
             res.sendStatus(404);
         }
@@ -129,16 +143,10 @@ class CartsApiController {
 
             if (purchaseResponse.ticket) {
 
-                const html = MailRenderService.renderTicket(purchaseResponse.ticket);
-
-                try {
-                    await mailSenderService.send(purchaseResponse.ticket.purchaser, html, 'Nueva compra!');
-                } catch (e) {
-                    throw new CustomError('there was a problem trying to send the ticket by email', CustomError.ERROR_TYPES.UNKNOWN_ERROR, 500);
-                }
+                const sessionResponse = await StripeService.createCheckoutSession(purchaseResponse.ticket, cid);
                 res.send({
                     'status': 'success',
-                    'payload': purchaseResponse
+                    'payload': sessionResponse.url
                 });
             } else if (!purchaseResponse.unavailable?.length) {
                 throw new CustomError('There is no stock for any of your products', CustomError.ERROR_TYPES.DATABASE_ERROR, 406);
@@ -148,6 +156,44 @@ class CartsApiController {
 
         } catch (e) {
             next(e);
+        }
+    }
+
+    //  TODO: This method is very similar to ticketService.finishPurchase(), probably i'll hava to try to refactor the code at some point
+    static async checkCartContentAvailability(cart) {
+        const unavailableProducts = [];
+        const availableProducts = [];
+
+        try {
+            for (let cartProduct of cart.products) {
+                //  I get the product from the catalog
+                const catalogProduct = await productManager.getById(cartProduct.product._id);
+                if (cartProduct.quantity <= catalogProduct.stock) {
+
+                    availableProducts.push({
+                        id: cartProduct.product._id,
+                        title: cartProduct.product.title,
+                        in_cart: cartProduct.quantity,
+                        in_stock: cartProduct.product.stock
+                    });
+                } else {
+                    unavailableProducts.push({
+                        id: cartProduct.product._id,
+                        title: cartProduct.product.title,
+                        in_cart: cartProduct.quantity,
+                        in_stock: cartProduct.product.stock
+                    });
+                }
+            }
+
+            return {
+                available: availableProducts,
+                unavailable: unavailableProducts,
+            };
+        } catch (e) {
+            logger.error(e.message);
+            logger.error('partial creation of ticket, for cart ', cart._id.toString());
+            return null;
         }
     }
 }

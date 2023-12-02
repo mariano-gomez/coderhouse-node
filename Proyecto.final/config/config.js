@@ -11,4 +11,6 @@ module.exports = {
     },
     ENV: process.env.ENVIRONMENT,
     PERSISTENCE: process.env.PERSISTENCE,
+    STRIPE_PUBLIC_KEY: process.env.STRIPE_PUBLIC_KEY,
+    STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY,
 };

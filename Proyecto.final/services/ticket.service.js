@@ -15,7 +15,8 @@ const finishPurchase = async (cart) => {
         code: await generateTicketCode(),
         amount: 0,
         products: [],
-        purchaser: user.email
+        purchaser: user.email,
+        status: 'pending'
     };
 
     const unavailableProducts = [];

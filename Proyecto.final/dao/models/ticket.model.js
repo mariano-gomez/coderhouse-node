@@ -15,6 +15,11 @@ const schema = new Schema({
         default: []
     },
     purchaser: String,
+    status: {
+        type: String,
+        enum: ['pending', 'completed'],
+        default: ''
+    },
     purchase_datetime: { type: Number, default: Date.now() },
 });
 
