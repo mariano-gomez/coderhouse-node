@@ -1,0 +1,24 @@
+<h1>Atencion!</h1>
+<p>
+    Al confirmar el pedido, en el mismo solamente van a agregarse los productos con stock suficiente. <br>
+    Aquellos productos sin stock suficiente, quedarán en el carrito para una próxima compra
+</p>
+<h2>Productos en stock</h2>
+<div id="stockProducts" class="uk-child-width-1-4@m" uk-grid>
+    <h1>Cargando informacion...</h1>
+</div>
+
+<hr>
+
+<button class="uk-button uk-button-secondary uk-button-small" id="confirm-purchase" style="display: none;" onclick="confirmPurchase();">
+        Confirmar compra
+</button>
+<hr>
+
+<h2>Productos sin stock (no serán agregados a la compra)</h2>
+
+<div id="outOfStockProducts" class="uk-child-width-1-4@m" uk-grid>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="/static/js/cart.js" defer></script>

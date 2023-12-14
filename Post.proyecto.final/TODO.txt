@@ -1,0 +1,2 @@
+- Finalizar lo que falte para completar circuito de compra
+- Agregar integracion con Stripe (ver clase)

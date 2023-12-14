@@ -1,0 +1,49 @@
+{
+  "name": "proyecto-curso-backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js --env production --persist mongo",
+    "start:dev:mongo": "nodemon --ignore '*.json' app.js --env development --persist mongo",
+    "start:dev:file": "nodemon --ignore '*.json' app.js --env development --persist file",
+    "start:prod:mongo": "node app.js --env production --persist mongo",
+    "start:prod:file": "node app.js --env production --persist file",
+    "seed:products": "node ./scripts/seeder.products.js",
+    "test": "mocha test/integration.test.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "chai": "^4.3.10",
+    "mocha": "^10.2.0",
+    "nodemon": "^2.0.22",
+    "supertest": "^6.3.3"
+  },
+  "dependencies": {
+    "@faker-js/faker": "^8.1.0",
+    "bcrypt": "^5.1.1",
+    "commander": "^11.0.0",
+    "connect-mongo": "^5.0.0",
+    "cookie-parser": "^1.4.6",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "express-handlebars": "^7.0.7",
+    "express-session": "^1.17.3",
+    "i": "^0.3.7",
+    "mongoose": "^7.4.1",
+    "mongoose-paginate-v2": "^1.7.31",
+    "multer": "^1.4.5-lts.1",
+    "nodemailer": "^6.9.5",
+    "npm": "^9.8.1",
+    "passport": "^0.6.0",
+    "passport-github2": "^0.1.12",
+    "passport-local": "^1.0.0",
+    "socket.io": "^4.7.1",
+    "stripe": "^14.5.0",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.0",
+    "winston": "^3.11.0"
+  }
+}
