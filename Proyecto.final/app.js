@@ -1,13 +1,15 @@
+/** BOOTSTRAPING: packages to read configuration from command lauch (`npm run dev --parameter --parameter */
 const { Command } = require('commander');
 const dotenv = require('dotenv');
 const path = require('path');
-
 const program = new Command();
-
-const dependencyContainer = require('./dependency.injection');
 const _dotenv = loadDotEnvVariables();
+
+/** BOOTSTRAPING: Creating a very basic dependency injection container    */
+const dependencyContainer = require('./dependency.injection');
 dependencyContainer.set('dotenv', _dotenv);
 
+/** BOOTSTRAPING: standard packages for the "framework" (express, handlebars, db library, cookies, etc)   */
 const express = require('express');
 const http = require('http');
 const handlebars = require('express-handlebars');
@@ -17,13 +19,17 @@ const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const MongoStore = require('connect-mongo');
 const passport = require('passport');
+
+/** BOOTSTRAPING: Documentation packages  */
 const swaggerJsDoc = require('swagger-jsdoc');
 const swaggerUiExpress = require('swagger-ui-express');
 
+/** BOOTSTRAPING: Logging system  */
 const logger = require('./services/logger.service');
 dependencyContainer.set('logger', logger);
 const loggerMiddleware = require('./middlewares/custom.logger.middleware');
 
+/** BOOTSTRAPING: Authentication handling    */
 const bindPassportStrategies = require('./config/passport.init.config');
 const customErrorHandlerMiddleware = require('./middlewares/custom.error.handler.middleware');
 
@@ -39,7 +45,7 @@ app.set('view engine', 'handlebars');
 //  eventually, i'll need to emit events from different places, so i need a unique place where i can fetch socket.io
 dependencyContainer.set('io', io);
 
-//  Some global configs
+//  Some global middlewares
 app.use(loggerMiddleware);
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
