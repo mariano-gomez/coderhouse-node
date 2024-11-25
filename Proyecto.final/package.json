@@ -1,5 +1,5 @@
 {
-  "name": "proyecto-curso-backend",
+  "name": "Final Proyect (coderhouse - node.js)",
   "version": "1.0.0",
   "description": "",
   "main": "app.js",
@@ -12,38 +12,39 @@
     "seed:products": "node ./scripts/seeder.products.js",
     "test": "mocha test/integration.test.js"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "private": true,
   "devDependencies": {
-    "chai": "^4.3.10",
-    "mocha": "^10.2.0",
-    "nodemon": "^2.0.22",
-    "supertest": "^6.3.3"
+    "chai": "^5.1.2",
+    "mocha": "^10.8.2",
+    "nodemon": "^3.1.7",
+    "supertest": "^7.0.0"
+  },
+  "installation_notes": {
+    "mocha": "npm warn deprecated inflight@1.0.6: This module is not supported, and leaks memory. Do not use it. Check out lru-cache if you want a good and tested way to coalesce async requests by a key value, which is much more comprehensive and powerful.\nnpm warn deprecated glob@8.1.0: Glob versions prior to v9 are no longer supported",
+    "brypt": "npm warn deprecated npmlog@5.0.1: This package is no longer supported.\nnpm warn deprecated rimraf@3.0.2: Rimraf versions prior to v4 are no longer supported\nnpm warn deprecated are-we-there-yet@2.0.0: This package is no longer supported.\nnpm warn deprecated glob@7.2.3: Glob versions prior to v9 are no longer supported\nnpm warn deprecated gauge@3.0.2: This package is no longer supported.",
+    "swagger-jsdoc": ""
   },
   "dependencies": {
-    "@faker-js/faker": "^8.1.0",
+    "@faker-js/faker": "^9.2.0",
     "bcrypt": "^5.1.1",
-    "commander": "^11.0.0",
-    "connect-mongo": "^5.0.0",
-    "cookie-parser": "^1.4.6",
-    "dotenv": "^16.3.1",
-    "express": "^4.18.2",
-    "express-handlebars": "^7.0.7",
-    "express-session": "^1.17.3",
-    "i": "^0.3.7",
-    "mongoose": "^7.4.1",
-    "mongoose-paginate-v2": "^1.7.31",
+    "commander": "^12.1.0",
+    "connect-mongo": "^5.1.0",
+    "cookie-parser": "^1.4.7",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.1",
+    "express-handlebars": "^8.0.1",
+    "express-session": "^1.18.1",
+    "mongoose": "^8.8.2",
+    "mongoose-paginate-v2": "^1.8.5",
     "multer": "^1.4.5-lts.1",
-    "nodemailer": "^6.9.5",
-    "npm": "^9.8.1",
-    "passport": "^0.6.0",
+    "nodemailer": "^6.9.16",
+    "passport": "^0.7.0",
     "passport-github2": "^0.1.12",
     "passport-local": "^1.0.0",
-    "socket.io": "^4.7.1",
-    "stripe": "^14.5.0",
+    "socket.io": "^4.8.1",
+    "stripe": "^17.4.0",
     "swagger-jsdoc": "^6.2.8",
-    "swagger-ui-express": "^5.0.0",
-    "winston": "^3.11.0"
+    "swagger-ui-express": "^5.0.1",
+    "winston": "^3.17.0"
   }
 }
